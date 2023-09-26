@@ -5,6 +5,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from config import db, bcrypt
 
 # Models go here!
+## revert to base Family model: flask db revision -m'Add Family model'
 
 class Family(db.Model, SerializerMixin):
    __tablename__ = 'families'
