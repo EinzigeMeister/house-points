@@ -10,7 +10,8 @@ class Family(db.Model, SerializerMixin):
    __tablename__ = 'families'
 
    id = db.Column(db.Integer, primary_key=True)
-   family_name = db.Column(db.String, unique=True)
+   family_name = db.Column(db.String)
+   family_username = db.Column(db.String, unique=True)
    _password_hash = db.Column(db.String)
 
    @hybrid_property
