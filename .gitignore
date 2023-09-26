@@ -55,4 +55,4 @@ jspm_packages
 __pycache__
 
 # Ignore env file
- server/env.env
+server/env.env
