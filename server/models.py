@@ -19,6 +19,7 @@ class Family(db.Model, SerializerMixin):
 
    serialize_rules = (
       "-users.family",
+      "-tasks.family"
    )
 
    @hybrid_property
@@ -34,7 +35,7 @@ class Family(db.Model, SerializerMixin):
       return bcrypt.check_password_hash(self._password_hash, password)
    
    def __repr__(self):
-      return f'Family {self.family_name}, ID: {self.id}'
+      return f'Family: {self.family_name}, ID: {self.id}'
    
 class User(db.Model, SerializerMixin):
    __tablename__ = 'users'
@@ -44,7 +45,26 @@ class User(db.Model, SerializerMixin):
    head_of_household = db.Column(db.Boolean, default = False, nullable = False)
 
    family_id = db.Column(db.Integer, db.ForeignKey('families.id'))
-
+   
+   serialize_rules = (
+      "-tasks.user",
+   )
 
    def __repr__(self):
-      return f'User {self.name}, ID: {self.id}, Head of Household: {self.head_of_household}'
+      return f'User: {self.name}, ID: {self.id}, Head of Household: {self.head_of_household}'
+   
+class Task(db.Model, SerializerMixin):
+   __tablename__ = 'tasks'
+
+   id = db.Column(db.Integer, primary_key = True)
+   title = db.Column(db.String, nullable = False)
+   location = db.Column(db.String, default = "Home")
+   description = db.Column(db.String, nullable = False)
+   points = db.Column(db.Integer, default = 1)
+   frequency = db.Column(db.String, default = "Daily")
+   
+   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  # Completed by
+   family_id = db.Column(db.Integer, db.ForeignKey('families.id'))
+
+   def __repr__(self):
+      return f'Task: {self.title}, ID: {self.id}, Location: {self.location}'
