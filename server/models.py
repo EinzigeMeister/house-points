@@ -11,9 +11,15 @@ class Family(db.Model, SerializerMixin):
    __tablename__ = 'families'
 
    id = db.Column(db.Integer, primary_key=True)
-   family_name = db.Column(db.String)
+   family_name = db.Column(db.String, nullable = False)
    family_username = db.Column(db.String, unique=True)
    _password_hash = db.Column(db.String)
+
+   users = db.relationship('User', backref='family')
+
+   serialize_rules = (
+      "-users.family",
+   )
 
    @hybrid_property
    def password_hash(self):
@@ -29,3 +35,16 @@ class Family(db.Model, SerializerMixin):
    
    def __repr__(self):
       return f'Family {self.family_name}, ID: {self.id}'
+   
+class User(db.Model, SerializerMixin):
+   __tablename__ = 'users'
+      
+   id = db.Column(db.Integer, primary_key = True)
+   name = db.Column(db.String, nullable = False)
+   head_of_household = db.Column(db.Boolean, default = False, nullable = False)
+
+   family_id = db.Column(db.Integer, db.ForeignKey('families.id'))
+
+
+   def __repr__(self):
+      return f'User {self.name}, ID: {self.id}, Head of Household: {self.head_of_household}'
