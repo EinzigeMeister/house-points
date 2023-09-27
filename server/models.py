@@ -8,20 +8,15 @@ from config import db, bcrypt
 ## revert to base Family model: flask db revision -m'Add Family model'
 
 class Family(db.Model, SerializerMixin):
-   __tablename__ = 'families'
+   __tablename__ = 'family_table'
 
    id = db.Column(db.Integer, primary_key=True)
    family_name = db.Column(db.String, nullable = False)
    family_username = db.Column(db.String, unique=True)
    _password_hash = db.Column(db.String)
 
-   users = db.relationship('User', backref='family')
-   tasks = db.relationship('Task', backref='family')
-
-   serialize_rules = (
-      "-users.family",
-      "-tasks.family"
-   )
+   users = db.relationship('User', back_populates = "family")
+   tasks = db.relationship('Task', back_populates = "family")
 
    @hybrid_property
    def password_hash(self):
@@ -39,23 +34,23 @@ class Family(db.Model, SerializerMixin):
       return f'Family: {self.family_name}, ID: {self.id}'
    
 class User(db.Model, SerializerMixin):
-   __tablename__ = 'users'
-      
+   __tablename__ = 'user_table'
+
    id = db.Column(db.Integer, primary_key = True)
    name = db.Column(db.String, nullable = False)
    head_of_household = db.Column(db.Boolean, default = False, nullable = False)
 
-   family_id = db.Column(db.Integer, db.ForeignKey('families.id'))
-   tasks = db.relationship('Task', backref='user')
-   serialize_rules = (
-      "-tasks.user",
-   )
+   family_id = db.Column(db.Integer, db.ForeignKey('family_table.id'))
+   family = db.relationship("Family")
+   tasks = db.relationship('Task')
+
+
 
    def __repr__(self):
       return f'User: {self.name}, ID: {self.id}, Head of Household: {self.head_of_household}'
    
 class Task(db.Model, SerializerMixin):
-   __tablename__ = 'tasks'
+   __tablename__ = 'task_table'
 
    id = db.Column(db.Integer, primary_key = True)
    title = db.Column(db.String, nullable = False)
@@ -63,9 +58,11 @@ class Task(db.Model, SerializerMixin):
    description = db.Column(db.String, nullable = False)
    points = db.Column(db.Integer, default = 1)
    frequency = db.Column(db.String, default = "Daily")
-
-   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  # Completed by
-   family_id = db.Column(db.Integer, db.ForeignKey('families.id'))
+   
+   user_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))  # Completed by
+   user = db.relationship("User")
+   family_id = db.Column(db.Integer, db.ForeignKey('family_table.id'))
+   family = db.relationship("Family")
 
    def __repr__(self):
       return f'Task: {self.title}, ID: {self.id}, Location: {self.location}'
