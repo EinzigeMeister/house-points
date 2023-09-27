@@ -8,14 +8,17 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Family
+from models import db, Family, User
 
 if __name__ == '__main__':
     fake = Faker()
     with app.app_context():
+        # Family data
         print("deleting tables...")
         Family.query.delete()
+        User.query.delete()
         print("Starting seed...")
+        print("Seeding families...")
         families = []
         family_usernames = []
         for i in range (10):
@@ -31,9 +34,27 @@ if __name__ == '__main__':
             families.append(new_family)
 
         db.session.add_all(families)
-        db.session.commit()
 
-        family_list = Family.query.all()
-        for f in family_list:
-            print(f)
-        # Seed code goes here!
+        # User data
+        print("Seeding users...")
+        users = []
+        for i in range(100):
+            name = fake.first_name()
+            family = rc(families)
+            new_user = User(
+                name=name
+            )
+            new_user.family= family
+            new_users_family = User.query.filter_by(family_id=family.id).all()
+            # make first user in family head of household
+            if len(new_users_family) ==0:
+                new_user.head_of_household=True
+                
+            users.append(new_user)
+            db.session.add(new_user)
+        
+        db.session.commit()
+        print('Seeding complete')
+
+
+
