@@ -17,6 +17,7 @@ if __name__ == '__main__':
         print("deleting tables...")
         Family.query.delete()
         User.query.delete()
+        Task.query.delete()
         print("Starting seed...")
         print("Seeding families...")
         families = []
