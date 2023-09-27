@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Family, User
+from models import db, Family, User, Task
 
 if __name__ == '__main__':
     fake = Faker()
@@ -26,6 +26,7 @@ if __name__ == '__main__':
             family_username = fake.profile()['username']
             while family_username in family_usernames:
                 family_username = fake.profile()['username']
+            family_usernames.append(family_username)
             password_hash = fake.password(length=10)
             
             new_family = Family(family_name=family_name, family_username=family_username)
@@ -45,14 +46,44 @@ if __name__ == '__main__':
                 name=name
             )
             new_user.family= family
-            new_users_family = User.query.filter_by(family_id=family.id).all()
             # make first user in family head of household
+            new_users_family = User.query.filter_by(family_id=family.id).all()
             if len(new_users_family) ==0:
                 new_user.head_of_household=True
                 
             users.append(new_user)
             db.session.add(new_user)
         
+        # Task data
+        print("Seeding tasks...")
+        tasks = []
+        locations = ["Bedroom", "Bathroom", "Living Room", "Kitchen", "Yard", "Garage", "Man Cave"]
+        frequencies = ["Daily", "Weekly", "Monthly"]
+        for i in range (200):
+            title = fake.sentence()
+            location = rc(locations)
+            description = fake.sentence()
+            points = randint(1,100)
+            frequency = rc(frequencies)
+            family = rc(families)
+            # randomly complete ~50% of tasks
+            completed_by = None
+            if fake.boolean():
+                completed_by = rc(users)
+
+            new_task = Task(
+                title=title,
+                location=location,
+                description=description,
+                points=points,
+                frequency=frequency
+            )
+            new_task.family = family    
+            if completed_by:
+                new_task.user = completed_by
+            tasks.append(new_task)
+
+        db.session.add_all(tasks)
         db.session.commit()
         print('Seeding complete')
 

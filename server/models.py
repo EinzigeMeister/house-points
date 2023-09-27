@@ -16,6 +16,7 @@ class Family(db.Model, SerializerMixin):
    _password_hash = db.Column(db.String)
 
    users = db.relationship('User', backref='family')
+   tasks = db.relationship('Task', backref='family')
 
    serialize_rules = (
       "-users.family",
@@ -45,7 +46,7 @@ class User(db.Model, SerializerMixin):
    head_of_household = db.Column(db.Boolean, default = False, nullable = False)
 
    family_id = db.Column(db.Integer, db.ForeignKey('families.id'))
-   
+   tasks = db.relationship('Task', backref='user')
    serialize_rules = (
       "-tasks.user",
    )
@@ -62,7 +63,7 @@ class Task(db.Model, SerializerMixin):
    description = db.Column(db.String, nullable = False)
    points = db.Column(db.Integer, default = 1)
    frequency = db.Column(db.String, default = "Daily")
-   
+
    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  # Completed by
    family_id = db.Column(db.Integer, db.ForeignKey('families.id'))
 
