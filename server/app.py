@@ -19,14 +19,32 @@ def index():
 
 class FamilyList(Resource):
     def get(self):
-        family_dict = [f.to_dict(only=("id","family_name", "family_username","tasks.id", "users.id")) for f in Family.query.all()]
+        family_dict = [f.to_dict(only=("id","family_name", "family_username", "users.name")) for f in Family.query.all()]
         
         return make_response(
             family_dict,
             200
         )
 
-api.add_resource(FamilyList, '/families', endpoint='/families')
+class UserList(Resource):
+    def get(self):
+        user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id")) for u in User.query.all()]
+        return make_response(
+            user_dict,
+            200
+        )
+
+class TaskList(Resource):
+    def get(self):
+        task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "user_id", "family_id")) for t in Task.query.all()]
+        return make_response(
+            task_dict,
+            200
+        )
+
+api.add_resource(TaskList, '/tasks', endpoint='tasks')
+api.add_resource(UserList, '/users', endpoint='users')
+api.add_resource(FamilyList, '/families', endpoint='families')
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
