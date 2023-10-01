@@ -5,7 +5,7 @@ function NavBar() {
     <BrowserRouter>
       <div className="container-fluid">
         <hr style={{ borderTop: "10px solid blue" }} />
-        <div class="row">
+        <div className="row">
           <Link to="/" className="col-sm">
             Home
           </Link>
