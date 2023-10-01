@@ -1,3 +1,6 @@
+#Ignore database files
+*.db
+
 # Created by https://www.gitignore.io/api/node
 
 .DS_Store
