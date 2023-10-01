@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import UserCard from "./UserCard";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import UserList from "./UserList";
 import NavBar from "./NavBar";
 function App() {
