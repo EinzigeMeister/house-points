@@ -42,9 +42,10 @@ class TaskList(Resource):
             200
         )
 
+
 api.add_resource(TaskList, '/tasks', endpoint='tasks')
 api.add_resource(UserList, '/users', endpoint='users')
 api.add_resource(FamilyList, '/families', endpoint='families')
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5555, debug=True)
 
