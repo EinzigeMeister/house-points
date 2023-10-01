@@ -19,7 +19,7 @@ def index():
 
 class FamilyList(Resource):
     def get(self):
-        family_dict = [f.to_dict(only=("id","family_name", "family_username", "users.name")) for f in Family.query.all()]
+        family_dict = [f.to_dict(only=("id","family_name", "family_username", "users.name", "tasks.id")) for f in Family.query.all()]
         
         return make_response(
             family_dict,
@@ -28,7 +28,7 @@ class FamilyList(Resource):
 
 class UserList(Resource):
     def get(self):
-        user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id")) for u in User.query.all()]
+        user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")) for u in User.query.all()]
         return make_response(
             user_dict,
             200
