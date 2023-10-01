@@ -59,7 +59,7 @@ class Task(db.Model, SerializerMixin):
    points = db.Column(db.Integer, default = 1)
    frequency = db.Column(db.String, default = "Daily")
    
-   user_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))  # Completed by
+   completed_by_user_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))  # Completed by
    user = db.relationship("User")
    family_id = db.Column(db.Integer, db.ForeignKey('family_table.id'))
    family = db.relationship("Family")

@@ -36,7 +36,7 @@ class UserList(Resource):
 
 class TaskList(Resource):
     def get(self):
-        task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "user_id", "family_id")) for t in Task.query.all()]
+        task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.all()]
         return make_response(
             task_dict,
             200
