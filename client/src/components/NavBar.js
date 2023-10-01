@@ -3,16 +3,16 @@ import { Link, BrowserRouter } from "react-router-dom";
 function NavBar() {
   return (
     <BrowserRouter>
-      <div class="container-fluid">
+      <div className="container-fluid">
         <hr style={{ borderTop: "10px solid blue" }} />
         <div class="row">
-          <Link to="/" class="col-sm">
+          <Link to="/" className="col-sm">
             Home
           </Link>
-          <Link to="/Tasks" class="col-sm">
+          <Link to="/Tasks" className="col-sm">
             Tasks
           </Link>
-          <Link to="/Scoreboard" class="col-sm">
+          <Link to="/Scoreboard" className="col-sm">
             Score Board
           </Link>
         </div>
