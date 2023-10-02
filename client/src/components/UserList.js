@@ -2,7 +2,7 @@ import React from "react";
 import UserCard from "./UserCard";
 function UserList({ users }) {
   if (users.length < 1) {
-    return <h1>Project Client</h1>;
+    return <h1>Loading users</h1>;
   } else
     return (
       <div className="container">
