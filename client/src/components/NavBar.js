@@ -1,24 +1,22 @@
 import React from "react";
-import { Link, BrowserRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 function NavBar() {
   return (
-    <BrowserRouter>
-      <div className="container-fluid">
-        <hr style={{ borderTop: "10px solid blue" }} />
-        <div className="row">
-          <Link to="/" className="col-sm">
-            Home
-          </Link>
-          <Link to="/Tasks" className="col-sm">
-            Tasks
-          </Link>
-          <Link to="/Scoreboard" className="col-sm">
-            Score Board
-          </Link>
-        </div>
-        <hr style={{ borderTop: "10px solid blue" }} />
+    <div className="container-fluid">
+      <hr style={{ borderTop: "10px solid blue" }} />
+      <div className="row">
+        <Link to="/" className="col-sm">
+          Home
+        </Link>
+        <Link to="/chores" className="col-sm">
+          Tasks
+        </Link>
+        <Link to="/scoreboard" className="col-sm">
+          Score Board
+        </Link>
       </div>
-    </BrowserRouter>
+      <hr style={{ borderTop: "10px solid blue" }} />
+    </div>
   );
 }
 export default NavBar;
