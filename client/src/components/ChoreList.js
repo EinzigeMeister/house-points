@@ -23,11 +23,14 @@ function ChoreList({ family }) {
 
   if (choreList.length > 0) {
     return (
-      <div>
+      <div className="container">
         {choreList.map((chore) => {
-          return <ChoreCard chore={chore} key={chore.id}></ChoreCard>;
+          return (
+            <div className="col-md-2" key={chore.id}>
+              <ChoreCard chore={chore}></ChoreCard>
+            </div>
+          );
         })}
-        ;
       </div>
     );
   } else return <div>Loading Chores</div>;
