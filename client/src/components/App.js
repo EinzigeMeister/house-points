@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import UserList from "./UserList";
 import NavBar from "./NavBar";
 import Home from "./Home";
+import ChoreList from "./ChoreList";
+import ScoreBoard from "./ScoreBoard";
 function App() {
   const [taskList, setTaskList] = useState([]);
   const [users, setUsers] = useState([]);
@@ -18,8 +20,14 @@ function App() {
         <Route exact path="/">
           <Home family={family} />
         </Route>
+        <Route path="/chores">
+          <ChoreList />
+        </Route>
         <Route exact path="/users">
           <UserList users={users}></UserList>
+        </Route>
+        <Route path="/scoreboard">
+          <ScoreBoard family={family} />
         </Route>
       </Switch>
     </Router>
