@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request, make_response, jsonify
+from flask import request, make_response, jsonify, session
 from flask_restful import Resource
 
 # Local imports
@@ -21,28 +21,35 @@ class FamilyList(Resource):
     def get(self):
         family_dict = [f.to_dict(only=("id","family_name", "family_username", "users.name", "tasks.id")) for f in Family.query.all()]
         
-        return make_response(
-            family_dict,
-            200
-        )
+        return make_response(family_dict, 200)
     def post(self):
-        pass
+        data = request.get_json()
+        duplicate_family = Family.query.filter_by(family_username=data["username"]).first()
+        if duplicate_family:
+            response = make_response({"error":"username already exists"},400)
+            return response
+        new_family = Family(
+            family_username = data["username"],
+            family_name = data["family_name"]
+        )
+        new_family.password_hash = data["password"]
+        db.session.add(new_family)
+        db.session.commit()
+        response = make_response(
+            new_family.to_dict(only=("id", "family_name", "family_username")),
+            201
+        )
+        return response
 
 class UserList(Resource):
     def get(self):
         user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")) for u in User.query.all()]
-        return make_response(
-            user_dict,
-            200
-        )
+        return make_response(user_dict, 200)
 
 class TaskList(Resource):
     def get(self):
         task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.all()]
-        return make_response(
-            task_dict,
-            200
-        )
+        return make_response(task_dict, 200)
 
 
 api.add_resource(TaskList, '/tasks', endpoint='tasks')

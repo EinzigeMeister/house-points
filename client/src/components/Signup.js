@@ -30,7 +30,7 @@ function Signup({ setFamily }) {
       family_name: "",
     },
     validationSchema: formSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       fetch("http://127.0.0.1:5555/families", {
         method: "POST",
         headers: {
@@ -38,7 +38,15 @@ function Signup({ setFamily }) {
         },
         body: JSON.stringify(values, null, 2),
       }).then((r) => {
-        if (r.status === 200) setRefreshPage(!refreshPage);
+        if (r.status === 201) {
+          resetForm({ values: "" });
+          setRefreshPage(!refreshPage);
+          setErrorMsgs([]);
+        }
+        if (r.status === 400) {
+          setErrorMsgs(...errorMsgs, ["Username already exists, please try one not listed below"]);
+        }
+
         //Add else for error messages (i.e. unique username)
       });
     },
@@ -46,6 +54,9 @@ function Signup({ setFamily }) {
 
   return (
     <div>
+      {errorMsgs.map((e) => {
+        return <div style={{ color: "red" }}>{e}</div>;
+      })}
       <form onSubmit={formik.handleSubmit} style={{ margin: "30px" }}>
         <label htmlFor="username">Username</label>
         <br />
@@ -67,8 +78,7 @@ function Signup({ setFamily }) {
       <table style={{ padding: "15px" }}>
         <tbody>
           <tr>
-            <th>username</th>
-            <th>last name</th>
+            <th>Reserved Usernames</th>
           </tr>
           {families == "undefined" ? (
             <tr>
@@ -79,7 +89,6 @@ function Signup({ setFamily }) {
               <>
                 <tr key={i}>
                   <td>{family.family_username}</td>
-                  <td>{family.family_name}</td>
                 </tr>
               </>
             ))
