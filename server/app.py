@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request, make_response, jsonify, session
+from flask import request, make_response, session
 from flask_restful import Resource
 
 # Local imports
@@ -26,8 +26,7 @@ class FamilyList(Resource):
         data = request.get_json()
         duplicate_family = Family.query.filter_by(family_username=data["username"]).first()
         if duplicate_family:
-            response = make_response({"error":"username already exists"},400)
-            return response
+            return make_response({"error":"username already exists"},400)
         new_family = Family(
             family_username = data["username"],
             family_name = data["family_name"]
@@ -35,6 +34,7 @@ class FamilyList(Resource):
         new_family.password_hash = data["password"]
         db.session.add(new_family)
         db.session.commit()
+        session['family_id']=new_family.id
         response = make_response(
             new_family.to_dict(only=("id", "family_name", "family_username")),
             201
