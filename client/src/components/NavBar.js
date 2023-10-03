@@ -8,6 +8,8 @@ function NavBar() {
         <Link to="/">Home</Link>
         <Link to="/chores">Tasks</Link>
         <Link to="/scoreboard">Score Board</Link>
+        <Link to="/login">Login</Link>
+        <Link to="/signup">Signup</Link>
       </div>
       <hr style={{ borderTop: "10px solid blue" }} />
     </div>

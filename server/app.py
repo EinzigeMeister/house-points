@@ -25,6 +25,8 @@ class FamilyList(Resource):
             family_dict,
             200
         )
+    def post(self):
+        pass
 
 class UserList(Resource):
     def get(self):

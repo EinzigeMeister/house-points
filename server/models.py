@@ -24,7 +24,7 @@ class Family(db.Model, SerializerMixin):
    
    @password_hash.setter
    def password_hash(self, password):
-      bcrypt_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+      bcrypt_hash = bcrypt.generate_password_hash(password.encode('utf-8')).decode('utf-8')
       self._password_hash = bcrypt_hash
    
    def authenticate(self, password):

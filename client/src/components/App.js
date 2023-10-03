@@ -5,6 +5,9 @@ import NavBar from "./NavBar";
 import Home from "./Home";
 import ChoreList from "./ChoreList";
 import ScoreBoard from "./ScoreBoard";
+import Signup from "./Signup";
+import Login from "./Login";
+
 function App() {
   const [users, setUsers] = useState([]);
   const [family, setFamily] = useState(null);
@@ -27,6 +30,12 @@ function App() {
         </Route>
         <Route exact path="/scoreboard">
           <ScoreBoard family={family} />
+        </Route>
+        <Route path="/login">
+          <Login setFamily={setFamily} />
+        </Route>
+        <Route path="/signup">
+          <Signup setFamily={setFamily} />
         </Route>
       </Switch>
     </div>
