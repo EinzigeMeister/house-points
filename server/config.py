@@ -11,8 +11,8 @@ from sqlalchemy import MetaData
 
 # Local imports
 import os
-from dotenv import load_dotenv
-load_dotenv()
+from dotenv import load_dotenv, dotenv_values
+load_dotenv("./env.env")
 # Instantiate app, set attributes
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
