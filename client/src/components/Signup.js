@@ -44,7 +44,7 @@ function Signup({ setFamily }) {
           setErrorMsgs([]);
         }
         if (r.status === 400) {
-          setErrorMsgs(...errorMsgs, ["Username already exists, please try one not listed below"]);
+          setErrorMsgs(["Username already exists, please try one not listed below"]);
         }
 
         //Add else for error messages (i.e. unique username)
