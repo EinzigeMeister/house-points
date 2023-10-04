@@ -36,7 +36,7 @@ class FamilyList(Resource):
         db.session.commit()
         session['family_id']=new_family.id
         response = make_response(
-            new_family.to_dict(only=("id", "family_name", "family_username")),
+            new_family.to_dict(only=("id", "family_name", "family_username", "users.name", "tasks.id")),
             201
         )
         return response

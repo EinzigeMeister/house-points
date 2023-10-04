@@ -38,18 +38,25 @@ function Signup({ setFamily }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values, null, 2),
-      }).then((r) => {
-        if (r.status === 201) {
-          resetForm({ values: "" });
-          setRefreshPage(!refreshPage);
-          setErrorMsgs([]);
-        }
-        if (r.status === 400) {
-          setErrorMsgs(["Username already exists, please try one not listed below"]);
-        }
+      })
+        .then((r) => {
+          if (r.status === 201) {
+            resetForm({ values: "" });
+            setRefreshPage(!refreshPage);
+            setErrorMsgs([]);
+            return r.json();
+          }
+          if (r.status === 400) {
+            setErrorMsgs(["Username already exists, please try one not listed below"]);
+          }
 
-        //Add else for error messages (i.e. unique username)
-      });
+          //Add else for error messages (i.e. unique username)
+        })
+        .then((data) => {
+          if (data.hasOwnProperty("id")) {
+            setFamily(data);
+          }
+        });
     },
   });
 
