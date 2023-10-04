@@ -50,8 +50,30 @@ class TaskList(Resource):
     def get(self):
         task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.all()]
         return make_response(task_dict, 200)
+    
+class Login(Resource):
 
+    def post(self):
 
+        username = request.get_json()['username']
+        family = Family.query.filter_by(family_username=username).first()
+        if not family:
+            return {'error': 'Invalid username or password'}, 401
+        password = request.get_json()['password']
+
+        if family.authenticate(password):
+            session['family_id'] = family.id
+            return family.to_dict(only=("id","family_name", "family_username", "users.name", "tasks.id")), 200
+
+        return {'error': 'Invalid username or password'}, 401
+
+class UserByFamily(Resource):
+    def get(self, id):
+        user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")) for u in User.query.filter_by(family_id=id).all()]
+        return user_dict
+    
+api.add_resource(UserByFamily, '/users/family/<int:id>', endpoint='user/family')
+api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(TaskList, '/tasks', endpoint='tasks')
 api.add_resource(UserList, '/users', endpoint='users')
 api.add_resource(FamilyList, '/families', endpoint='families')
