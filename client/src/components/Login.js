@@ -9,15 +9,14 @@ function Login({ users, setUsers, family, setFamily }) {
 
   //Update family list after each successful registration
   useEffect(() => {
-    console.log(family);
     if (family != null) {
-      console.log(family.id);
       fetch(`http://127.0.0.1:5555/users/family/${family.id}`)
         .then((r) => r.json())
         .then((data) => setUsers(data));
+      console.log(users);
     }
-    setRefreshPage(false);
-  }, [refreshPage]);
+    setRefreshPage(true);
+  }, [refreshPage, family, setUsers]);
 
   const formSchema = yup.object().shape({
     username: yup.string().required("Must enter a username up to 16 characters").max(16),
@@ -81,7 +80,7 @@ function Login({ users, setUsers, family, setFamily }) {
                 <th>Name</th>
               </tr>
               {users.map((user, i) => (
-                <tr key={i}>
+                <tr key={user.id + " " + i}>
                   <td>{user.name}</td>
                 </tr>
               ))}
