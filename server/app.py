@@ -72,13 +72,29 @@ class UserByFamily(Resource):
         user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")) for u in User.query.filter_by(family_id=id).all()]
         return user_dict
 
-class ChoresByFamily(Resource):
+class TasksByFamily(Resource):
     def get(self, id):
-        task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.filter_by(family_id=id).all()]
+        task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.filter_by(family_id=id).order_by("completed_by_user_id").all()]
         return make_response(task_dict, 200)
+ 
+class TaskByID(Resource):
+    def patch(self, id):
+        task = Task.query.filter_by(id=id).first()
+        for attr in request.get_json():
+            setattr(task, attr, request.get_json()[attr])
+        db.session.add(task)
+        db.session.commit()
+        
+        response_dict = task.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id"))
 
-api.add_resource(ChoresByFamily, '/tasks/family/<int:id>', endpoint='tasks/family')    
-api.add_resource(UserByFamily, '/users/family/<int:id>', endpoint='user/family')
+        return make_response(
+            response_dict,
+            200
+        )
+
+api.add_resource(TaskByID, '/tasks/<int:id>', endpoint='tasks/<int:id>')
+api.add_resource(TasksByFamily, '/tasks/family/<int:id>', endpoint='tasks/family/<int:id>')    
+api.add_resource(UserByFamily, '/users/family/<int:id>', endpoint='user/family/<int:id>')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(TaskList, '/tasks', endpoint='tasks')
 api.add_resource(UserList, '/users', endpoint='users')

@@ -3,26 +3,41 @@ import React, { useEffect, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem, Card, Button, CardActions, CardContent, Typography } from "@mui/material";
 
 function ChoreCard({ chore, family, users }) {
-  const [chosenUser, setChosenUser] = useState(0);
+  const [chosenUser, setChosenUser] = useState("");
   const [likedBy, setLikedBy] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [taskCompleteText, setTaskCompleteText] = useState("Complete Task");
   useEffect(() => {
     if (family != null) {
-      setChosenUser(users[0].id);
+      if (chore["completed_by_user_id"] != null) {
+        setDisabled(true);
+        const completedUser = users.find((user) => user.id === chore["completed_by_user_id"]);
+        setChosenUser(completedUser.id);
+      }
     }
-  }, [users, family]);
+  }, [users, family, chosenUser]);
 
   const { id, location, title, description, points } = chore;
   function handleChange(event) {
     setChosenUser(event.target.value);
   }
   function handleCompleteTask(event) {
+    const completedByUserID = chosenUser;
+    if (completedByUserID === "") return null;
+    fetch(`http://127.0.0.1:5555/tasks/${chore.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ completed_by_user_id: completedByUserID }),
+    })
+      .then((r) => r.json())
+      .then((data) => console.log(data));
     setDisabled(true);
     setTaskCompleteText("Completed");
   }
   return (
-    <Card sx={{ minWidth: 275 }} className={id}>
+    <Card sx={{ minWidth: 275 }} className={id.toString()}>
       <CardContent>
         <Typography variant="h5" component="div">
           {title}
