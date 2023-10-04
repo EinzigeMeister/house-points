@@ -74,7 +74,7 @@ if __name__ == '__main__':
             # randomly complete ~50% of tasks
             completed_by = None
             if fake.boolean():
-                completed_by = rc(users)
+                completed_by = rc([user for user in users if user.family_id ==family.id])
 
             new_task = Task(
                 title=title,
