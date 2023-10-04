@@ -13,6 +13,7 @@ function ChoreCard({ chore, family, users }) {
         setDisabled(true);
         const completedUser = users.find((user) => user.id === chore["completed_by_user_id"]);
         setChosenUser(completedUser.id);
+        console.log(completedUser);
       }
     }
   }, [users, family, chosenUser]);
@@ -24,7 +25,8 @@ function ChoreCard({ chore, family, users }) {
   function handleCompleteTask(event) {
     const completedByUserID = chosenUser;
     if (completedByUserID === "") return null;
-    fetch(`http://127.0.0.1:5555/tasks/${chore.id}`, {
+    fetch(`/tasks/${chore.id}`, {
+      credentials: "include",
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

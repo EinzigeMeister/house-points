@@ -31,7 +31,8 @@ function Signup({ setFamily }) {
     },
     validationSchema: formSchema,
     onSubmit: (values, { resetForm }) => {
-      fetch("http://127.0.0.1:5555/families", {
+      fetch("/families", {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

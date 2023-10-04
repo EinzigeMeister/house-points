@@ -7,7 +7,7 @@ TODO:
 [ ] 
  */
 async function getChores(family, setChoreList) {
-  let choreResponse = await fetch(`http://127.0.0.1:5555/tasks/family/${family.id}`);
+  let choreResponse = await fetch(`/tasks/family/${family.id}`);
   let choreJSON = await choreResponse.json();
   setChoreList(choreJSON);
 }

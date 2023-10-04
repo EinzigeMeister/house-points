@@ -7,15 +7,26 @@ import ChoreList from "./ChoreList";
 import ScoreBoard from "./ScoreBoard";
 import Signup from "./Signup";
 import Login from "./Login";
+import Logout from "./Logout";
 
 function App() {
   const [users, setUsers] = useState([]);
   const [family, setFamily] = useState(null);
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetch("/check_session", { credentials: "include" }).then((response) => {
+      if (response.ok) {
+        response.json().then((fam) => setFamily(fam));
+      }
+    });
+    if (family != null) {
+      fetch(`http://127.0.0.1:5555/users/family/${family.id}`)
+        .then((r) => r.json())
+        .then((data) => setUsers(data));
+    }
+  }, [family]);
   return (
     <div>
-      <NavBar />
+      <NavBar family={family} />
       <Switch>
         <Route exact path="/">
           <Home family={family} />
@@ -31,6 +42,9 @@ function App() {
         </Route>
         <Route path="/login">
           <Login users={users} setFamily={setFamily} setUsers={setUsers} family={family} />
+        </Route>
+        <Route path="/logout">
+          <Logout setFamily={setFamily} setUsers={setUsers} />
         </Route>
         <Route path="/signup">
           <Signup setFamily={setFamily} />

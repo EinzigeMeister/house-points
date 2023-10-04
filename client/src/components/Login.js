@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -9,15 +10,11 @@ function Login({ users, setUsers, family, setFamily }) {
 
   //Update family list after each successful registration
   useEffect(() => {
-    if (family != null) {
-      fetch(`http://127.0.0.1:5555/users/family/${family.id}`)
-        .then((r) => r.json())
-        .then((data) => setUsers(data));
-      console.log(users);
-    }
+    
     setRefreshPage(true);
   }, [refreshPage, family, setUsers]);
 
+  let history = useHistory();
   const formSchema = yup.object().shape({
     username: yup.string().required("Must enter a username up to 16 characters").max(16),
     password: yup.string().required("Must enter a password"),
@@ -31,6 +28,7 @@ function Login({ users, setUsers, family, setFamily }) {
     validationSchema: formSchema,
     onSubmit: (values, { resetForm }) => {
       fetch("http://127.0.0.1:5555/login", {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +45,11 @@ function Login({ users, setUsers, family, setFamily }) {
           }
           return r.json();
         })
-        .then((data) => setFamily(data));
+        .then((data) => {
+          setFamily(data);
+          setRefreshPage(!refreshPage);
+          history.push("/");
+        });
     },
   });
 
@@ -67,27 +69,6 @@ function Login({ users, setUsers, family, setFamily }) {
         <p style={{ color: "red" }}> {formik.errors.password}</p>
         <button type="submit">Submit</button>
       </form>
-      <table style={{ padding: "15px" }}>
-        {" "}
-        <tbody>
-          {family == null ? (
-            <tr>
-              <th>Login to view family members</th>
-            </tr>
-          ) : (
-            <>
-              <tr>
-                <th>Name</th>
-              </tr>
-              {users.map((user, i) => (
-                <tr key={user.id + " " + i}>
-                  <td>{user.name}</td>
-                </tr>
-              ))}
-            </>
-          )}
-        </tbody>{" "}
-      </table>
     </div>
   );
 }

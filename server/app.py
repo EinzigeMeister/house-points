@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request, make_response, session
+from flask import request, make_response, session, jsonify
 from flask_restful import Resource
 
 # Local imports
@@ -66,6 +66,11 @@ class Login(Resource):
             return family.to_dict(only=("id","family_name", "family_username", "users.name", "tasks.id")), 200
 
         return {'error': 'Invalid username or password'}, 401
+    
+class Logout(Resource):
+    def delete(self):
+        session['family_id'] = None
+        return make_response({'message': '204: No Content'}, 204)
 
 class UserByFamily(Resource):
     def get(self, id):
@@ -91,7 +96,18 @@ class TaskByID(Resource):
             response_dict,
             200
         )
+class CheckSession(Resource):
 
+    def get(self):
+        print(session.get('family_id'))
+        family = Family.query.filter_by(id =session.get('family_id')).first()
+        if family:
+            return family.to_dict(only=("id", "family_name", "family_username"))
+        else:
+            return make_response({'message': '401: Not Authorized'}, 401)
+        
+api.add_resource(Logout, '/logout')
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(TaskByID, '/tasks/<int:id>', endpoint='tasks/<int:id>')
 api.add_resource(TasksByFamily, '/tasks/family/<int:id>', endpoint='tasks/family/<int:id>')    
 api.add_resource(UserByFamily, '/users/family/<int:id>', endpoint='user/family/<int:id>')
