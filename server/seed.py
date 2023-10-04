@@ -22,7 +22,11 @@ if __name__ == '__main__':
         print("Seeding families...")
         families = []
         family_usernames = []
-        for i in range (10):
+        test_family = Family(family_name="Smith", family_username="TheSmiths")
+        test_family.password_hash = "Admin"
+        family_usernames.append(test_family.family_username)
+        families.append(test_family)
+        for i in range (9):
             family_name = fake.last_name()
             family_username = fake.profile()['username']
             while family_username in family_usernames:
