@@ -12,9 +12,7 @@ function App() {
   const [users, setUsers] = useState([]);
   const [family, setFamily] = useState(null);
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:5555/users").then((r) => r.json().then((userList) => setUsers(userList)));
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div>
       <NavBar />
@@ -32,7 +30,7 @@ function App() {
           <ScoreBoard family={family} />
         </Route>
         <Route path="/login">
-          <Login setFamily={setFamily} />
+          <Login users={users} setFamily={setFamily} setUsers={setUsers} family={family} />
         </Route>
         <Route path="/signup">
           <Signup setFamily={setFamily} />
