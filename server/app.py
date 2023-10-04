@@ -71,7 +71,13 @@ class UserByFamily(Resource):
     def get(self, id):
         user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")) for u in User.query.filter_by(family_id=id).all()]
         return user_dict
-    
+
+class ChoresByFamily(Resource):
+    def get(self, id):
+        task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.filter_by(family_id=id).all()]
+        return make_response(task_dict, 200)
+
+api.add_resource(ChoresByFamily, '/tasks/family/<int:id>', endpoint='tasks/family')    
 api.add_resource(UserByFamily, '/users/family/<int:id>', endpoint='user/family')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(TaskList, '/tasks', endpoint='tasks')

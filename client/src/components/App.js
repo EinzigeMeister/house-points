@@ -21,7 +21,7 @@ function App() {
           <Home family={family} />
         </Route>
         <Route exact path="/chores">
-          <ChoreList family={family} />
+          <ChoreList family={family} users={users} />
         </Route>
         <Route exact path="/users">
           <UserList users={users} />
