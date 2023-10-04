@@ -4,7 +4,7 @@ import { FormControl, InputLabel, Select, MenuItem, Card, Button, CardActions, C
 
 function ChoreCard({ chore, family, users }) {
   const [chosenUser, setChosenUser] = useState("");
-  const [likedBy, setLikedBy] = useState([]);
+  // const [likedBy, setLikedBy] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [taskCompleteText, setTaskCompleteText] = useState("Complete Task");
   useEffect(() => {
@@ -16,6 +16,7 @@ function ChoreCard({ chore, family, users }) {
         console.log(completedUser);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, family, chosenUser]);
 
   const { id, location, title, description, points } = chore;
