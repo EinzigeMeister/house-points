@@ -86,11 +86,9 @@ function Signup({ setFamily }) {
             </tr>
           ) : (
             families.map((family, i) => (
-              <>
-                <tr key={i}>
-                  <td>{family.family_username}</td>
-                </tr>
-              </>
+              <tr key={i}>
+                <td>{family.family_username}</td>
+              </tr>
             ))
           )}
         </tbody>
