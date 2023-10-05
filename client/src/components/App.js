@@ -16,7 +16,9 @@ function App() {
   useEffect(() => {
     fetch("/check_session", { credentials: "include" }).then((response) => {
       if (response.ok) {
-        response.json().then((fam) => setFamily(fam));
+        response.json().then((fam) => {
+          if (!family || family.id !== fam.id) setFamily(fam);
+        });
       }
     });
     if (family != null) {
