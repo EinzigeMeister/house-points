@@ -35,7 +35,7 @@ function ChoreList({ family, users }) {
         })}
       </div>
     );
-  } else return <div>Loading Chores</div>;
+  } else return <div>No chores added yet!</div>;
 }
 
 export default ChoreList;
