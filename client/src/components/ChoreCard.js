@@ -11,6 +11,7 @@ function ChoreCard({ chore, family, users }) {
   const [refreshPage, setRefreshPage] = useState("false");
   useEffect(() => {
     if (family != null) {
+      if (users.length === 0) setDisabled(true);
       if (chore["completed_by_user_id"] != null) {
         setDisabled(true);
         setDisabledColor("Green");
