@@ -15,7 +15,6 @@ function ChoreCard({ chore, family, users }) {
         setDisabledColor("Green");
         const completedUser = users.find((user) => user.id === chore["completed_by_user_id"]);
         setChosenUser(completedUser.id);
-        console.log(completedUser);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,9 +34,7 @@ function ChoreCard({ chore, family, users }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ completed_by_user_id: completedByUserID }),
-    })
-      .then((r) => r.json())
-      .then((data) => console.log(data));
+    });
     setDisabled(true);
     setTaskCompleteText("Completed");
   }
