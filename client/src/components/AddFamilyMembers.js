@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import UserList from "./UserList";
-function AddFamilyMembers({ family, users }) {
+function AddFamilyMembers({ family, users, updateUserList }) {
+  const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
 
   const formSchema = yup.object().shape({
     name: yup.string().required("Must enter a name").max(50),
   });
   function handleSubmit(values, { resetForm }) {
+    values["family_id"] = family.id;
+    if (users.length < 1) values["head_of_household"] = true;
+
     fetch(`/users`, {
       credentials: "include",
       method: "POST",
@@ -21,12 +25,15 @@ function AddFamilyMembers({ family, users }) {
         return r.json();
       })
       .then((data) => {
+        if (!data) return null;
         if (data.hasOwnProperty("error")) {
           setErrorMsgs(...errorMsgs, [data["error"]]);
           return null;
         } else {
           setErrorMsgs([]);
           resetForm();
+          updateUserList();
+          setRefreshPage(!refreshPage);
         }
       });
   }

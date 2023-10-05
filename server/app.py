@@ -45,7 +45,24 @@ class UserList(Resource):
     def get(self):
         user_dict = [u.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")) for u in User.query.all()]
         return make_response(user_dict, 200)
-
+    def post(self):
+        user_json = request.get_json()
+        name = user_json.get('name')
+        if (not name): return make_response({"error" : "Must include a name"}, 400)
+        head_of_household = user_json.get('head_of_household') or False
+        family_id = user_json.get('family_id')
+        new_user = User(
+            name=user_json.get("name"),
+            family_id=family_id,
+            head_of_household=head_of_household
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        resp = make_response(
+            new_user.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")),
+            201
+        )
+        return resp
 class TaskList(Resource):
     def get(self):
         task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.all()]

@@ -14,6 +14,11 @@ import AddFamilyMembers from "./AddFamilyMembers";
 function App() {
   const [users, setUsers] = useState([]);
   const [family, setFamily] = useState(null);
+  function updateUserList() {
+    fetch(`http://127.0.0.1:5555/users/family/${family.id}`)
+      .then((r) => r.json())
+      .then((data) => setUsers(data));
+  }
   useEffect(() => {
     fetch("/check_session", { credentials: "include" }).then((response) => {
       if (response.ok) {
@@ -23,9 +28,7 @@ function App() {
       }
     });
     if (family != null) {
-      fetch(`http://127.0.0.1:5555/users/family/${family.id}`)
-        .then((r) => r.json())
-        .then((data) => setUsers(data));
+      updateUserList();
     }
   }, [family]);
   return (
@@ -57,7 +60,7 @@ function App() {
           <NewChoreForm family={family} />
         </Route>
         <Route path="/users/new">
-          <AddFamilyMembers family={family} users={users} />
+          <AddFamilyMembers family={family} users={users} updateUserList={updateUserList} />
         </Route>
       </Switch>
     </div>
