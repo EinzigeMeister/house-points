@@ -10,7 +10,6 @@ function Login({ users, setUsers, family, setFamily }) {
 
   //Update family list after each successful registration
   useEffect(() => {
-    
     setRefreshPage(true);
   }, [refreshPage, family, setUsers]);
 
@@ -46,9 +45,11 @@ function Login({ users, setUsers, family, setFamily }) {
           return r.json();
         })
         .then((data) => {
-          setFamily(data);
-          setRefreshPage(!refreshPage);
-          history.push("/");
+          if (!data.hasOwnProperty("error")) {
+            setFamily(data);
+            setRefreshPage(!refreshPage);
+            history.push("/");
+          }
         });
     },
   });
