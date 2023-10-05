@@ -1,13 +1,12 @@
 import React from "react";
 import UserCard from "./UserCard";
 function UserList({ users }) {
-  if (users.length < 1) {
-    return <h1>Loading users</h1>;
-  } else
+  if (!users) return <div>No family members created</div>;
+  else
     return (
       <div className="container">
         {users.map((user) => {
-          return <UserCard user={user} key={user.id}></UserCard>;
+          return <div key={user.id}>{user.name}</div>;
         })}
       </div>
     );
