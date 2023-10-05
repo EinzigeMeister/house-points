@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 function NewChoreForm({ family }) {
   const [refreshPage, setRefreshPage] = useState(false);
+  const [errorMsgs, setErrorMsgs] = useState([]);
   useEffect(() => {}, [refreshPage]);
   const formSchema = yup.object().shape({
     name: yup.string().required("Must enter a name for the chore").max(50),
@@ -12,33 +13,26 @@ function NewChoreForm({ family }) {
     frequency: yup.string().max(30),
   });
   function handleSubmit(values, { resetForm }) {
-    console.log(values);
-    // fetch(`/new_task/${family.id}`, {
-    //   credentials: "include",
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(values, null, 2),
-    // })
-    //   .then((r) => {
-    //     if (r.status === 201) {
-    //       resetForm({ values: "" });
-    //       setRefreshPage(!refreshPage);
-    //       setErrorMsgs([]);
-    //       return r.json();
-    //     }
-    //     if (r.status === 400) {
-    //       setErrorMsgs(["Username already exists, please try one not listed below"]);
-    //     }
-
-    //     //Add else for error messages (i.e. unique username)
-    //   })
-    //   .then((data) => {
-    //     if (data.hasOwnProperty("id")) {
-    //       setFamily(data);
-    //     }
-    //   });
+    fetch(`/tasks/family/${family.id}`, {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values, null, 2),
+    })
+      .then((r) => {
+        return r.json();
+      })
+      .then((data) => {
+        if (data.hasOwnProperty("error")) {
+          setErrorMsgs(...errorMsgs, [data["error"]]);
+          return null;
+        } else {
+          setErrorMsgs([]);
+          resetForm();
+        }
+      });
   }
   const formik = useFormik({
     initialValues: {
@@ -54,6 +48,7 @@ function NewChoreForm({ family }) {
 
   return (
     <div>
+      <p>{errorMsgs.length > 0 ? errorMsgs[0] : ""}</p>
       <form onSubmit={formik.handleSubmit} style={{ margin: "30px" }}>
         <label htmlFor="name">Chore Name</label>
         <br />
