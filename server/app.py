@@ -81,7 +81,28 @@ class TasksByFamily(Resource):
     def get(self, id):
         task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.filter_by(family_id=id).order_by("completed_by_user_id").all()]
         return make_response(task_dict, 200)
- 
+    def post(self, id):
+        task_json = request.get_json()
+        title = task_json.get("name"),
+        description = task_json.get("description"),
+        location = task_json.get("location", "home")
+        points = task_json.get("frequency")
+        family_id = id
+        if (not title or not description):
+            return make_response({"error: ": "title and description required"}, 400)
+        new_task = Task(
+            title=title[0],
+            description = description[0],
+            location = location,
+            points = points,
+            family_id = family_id
+        )
+        db.session.add(new_task)
+        db.session.commit()
+        new_task_dict = new_task.to_dict(only=("id","title", "location", "description", "points", "frequency", "family_id"))
+        print(new_task_dict)
+        return (new_task_dict, 200)
+    
 class TaskByID(Resource):
     def patch(self, id):
         task = Task.query.filter_by(id=id).first()
