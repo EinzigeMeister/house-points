@@ -8,6 +8,7 @@ function ChoreCard({ chore, family, users }) {
   const [disabled, setDisabled] = useState(false);
   const [disabledColor, setDisabledColor] = useState("Yellow");
   const [taskCompleteText, setTaskCompleteText] = useState("Complete Task");
+  const [refreshPage, setRefreshPage] = useState("false");
   useEffect(() => {
     if (family != null) {
       if (chore["completed_by_user_id"] != null) {
@@ -18,7 +19,7 @@ function ChoreCard({ chore, family, users }) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users, family, chosenUser]);
+  }, [users, family, chosenUser, refreshPage]);
 
   const { id, location, title, description, points } = chore;
   function handleChange(event) {
@@ -27,7 +28,7 @@ function ChoreCard({ chore, family, users }) {
   function handleCompleteTask(event) {
     const completedByUserID = chosenUser;
     if (completedByUserID === "") return null;
-    fetch(`/tasks/${chore.id}`, {
+    fetch(`/tasks/${id}`, {
       credentials: "include",
       method: "PATCH",
       headers: {
@@ -37,6 +38,14 @@ function ChoreCard({ chore, family, users }) {
     });
     setDisabled(true);
     setTaskCompleteText("Completed");
+  }
+  function handleDeleteTask(event) {
+    fetch(`/tasks/${id}`, {
+      credentials: "include",
+      method: "DELETE",
+    });
+    setDisabled(true);
+    setRefreshPage(!refreshPage);
   }
   return (
     <Card sx={{ minWidth: 275 }} className={id.toString()}>
@@ -70,6 +79,9 @@ function ChoreCard({ chore, family, users }) {
           </Select>
           <Button onClick={handleCompleteTask} disabled={disabled}>
             {taskCompleteText}
+          </Button>
+          <Button onClick={handleDeleteTask} disabled={disabled}>
+            Remove Task
           </Button>
         </FormControl>
       </CardActions>
