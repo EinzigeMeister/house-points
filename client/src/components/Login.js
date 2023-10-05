@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-function Login({ users, setUsers, family, setFamily }) {
+function Login({ setFamily }) {
   const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]); //use in custom validation for unique username
   //Fetch families to validate unique usernames
@@ -11,7 +11,7 @@ function Login({ users, setUsers, family, setFamily }) {
   //Update family list after each successful registration
   useEffect(() => {
     setRefreshPage(true);
-  }, [refreshPage, family, setUsers]);
+  }, [refreshPage]);
 
   let history = useHistory();
   const formSchema = yup.object().shape({
@@ -26,7 +26,7 @@ function Login({ users, setUsers, family, setFamily }) {
     },
     validationSchema: formSchema,
     onSubmit: (values, { resetForm }) => {
-      fetch("http://127.0.0.1:5555/login", {
+      fetch("/login", {
         credentials: "include",
         method: "POST",
         headers: {
