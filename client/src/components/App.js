@@ -8,6 +8,7 @@ import ScoreBoard from "./ScoreBoard";
 import Signup from "./Signup";
 import Login from "./Login";
 import Logout from "./Logout";
+import NewChoreForm from "./NewChoreForm";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -48,6 +49,9 @@ function App() {
         </Route>
         <Route path="/signup">
           <Signup setFamily={setFamily} />
+        </Route>
+        <Route path="/chores/new">
+          <NewChoreForm family={family} />
         </Route>
       </Switch>
     </div>
