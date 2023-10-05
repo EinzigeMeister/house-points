@@ -86,9 +86,10 @@ class TasksByFamily(Resource):
         title = task_json.get("name"),
         description = task_json.get("description"),
         location = task_json.get("location", "home")
+        if (len(location)<1): location = "home"
         points = task_json.get("frequency")
         family_id = id
-        if (not title or not description):
+        if (len(title) <1 or len(description)<1):
             return make_response({"error: ": "title and description required"}, 400)
         new_task = Task(
             title=title[0],
@@ -117,6 +118,11 @@ class TaskByID(Resource):
             response_dict,
             200
         )
+    def delete(self, id):
+        task = Task.query.filter_by(id=id).first()
+        db.session.delete(task)
+        db.session.commit()
+        return ({"message": "successfully deleted task"}, 200)
 class CheckSession(Resource):
 
     def get(self):
