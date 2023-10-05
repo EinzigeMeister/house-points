@@ -62,7 +62,7 @@ if __name__ == '__main__':
         # Task data
         print("Seeding tasks...")
         tasks = []
-        locations = ["Bedroom", "Bathroom", "Living Room", "Kitchen", "Yard", "Garage", "Man Cave"]
+        locations = ["Bedroom", "Bathroom", "Living Room", "Kitchen", "Yard", "Garage", "Man Cave", "She Shed"]
         frequencies = ["Daily", "Weekly", "Monthly"]
         for i in range (200):
             title = fake.sentence()
