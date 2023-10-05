@@ -25,15 +25,20 @@ function ChoreList({ family, users }) {
   if (family == null) return <div>Please login to view chores</div>;
   if (choreList.length > 0) {
     return (
-      <div className="container">
-        {choreList.map((chore) => {
-          return (
-            <div className="col-md-2" key={chore.id}>
-              <ChoreCard users={users} chore={chore} family={family}></ChoreCard>
-            </div>
-          );
-        })}
-      </div>
+      <>
+        <div style={{ color: "red" }} display={users.length !== 0 ? "block" : ""}>
+          {users.length === 0 ? "Add some family members to be able to complete tasks" : ""}
+        </div>
+        <div className="container">
+          {choreList.map((chore) => {
+            return (
+              <div className="col-md-2" key={chore.id}>
+                <ChoreCard users={users} chore={chore} family={family}></ChoreCard>
+              </div>
+            );
+          })}
+        </div>
+      </>
     );
   } else return <div>No chores added yet!</div>;
 }
