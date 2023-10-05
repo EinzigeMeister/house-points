@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
+
 function NewChoreForm({ family }) {
-  const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  useEffect(() => {}, [refreshPage]);
+
   const formSchema = yup.object().shape({
     name: yup.string().required("Must enter a name for the chore").max(50),
     description: yup.string().required("Must enter a description for the chore"),
@@ -45,7 +45,7 @@ function NewChoreForm({ family }) {
     validationSchema: formSchema,
     onSubmit: handleSubmit,
   });
-
+  if (!family) return <div>Login to add a chore</div>;
   return (
     <div>
       <p>{errorMsgs.length > 0 ? errorMsgs[0] : ""}</p>
