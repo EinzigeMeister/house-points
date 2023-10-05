@@ -6,17 +6,19 @@ function ChoreCard({ chore, family, users }) {
   const [chosenUser, setChosenUser] = useState("");
   // const [likedBy, setLikedBy] = useState([]);
   const [disabled, setDisabled] = useState(false);
+  const [disabledColor, setDisabledColor] = useState("Yellow");
   const [taskCompleteText, setTaskCompleteText] = useState("Complete Task");
   useEffect(() => {
     if (family != null) {
       if (chore["completed_by_user_id"] != null) {
         setDisabled(true);
+        setDisabledColor("Green");
         const completedUser = users.find((user) => user.id === chore["completed_by_user_id"]);
         setChosenUser(completedUser.id);
         console.log(completedUser);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, family, chosenUser]);
 
   const { id, location, title, description, points } = chore;
@@ -42,7 +44,7 @@ function ChoreCard({ chore, family, users }) {
   return (
     <Card sx={{ minWidth: 275 }} className={id.toString()}>
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography bgcolor={disabledColor} variant="h5" component="div">
           {title}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
