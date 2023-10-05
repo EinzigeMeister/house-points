@@ -8,6 +8,7 @@ function NavBar({ family }) {
         <Link to="/">Home</Link>
         <Link to="/chores">View Tasks</Link>
         <Link to="/chores/new">Add Task</Link>
+        <Link to="/users/new">Add Family</Link>
         <Link to="/scoreboard">Score Board</Link>
         {family == null ? <Link to="/login">Login</Link> : <Link to="/logout">Logout</Link>}
         <Link to="/signup">Signup</Link>

@@ -9,6 +9,7 @@ import Signup from "./Signup";
 import Login from "./Login";
 import Logout from "./Logout";
 import NewChoreForm from "./NewChoreForm";
+import AddFamilyMembers from "./AddFamilyMembers";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -55,19 +56,12 @@ function App() {
         <Route path="/chores/new">
           <NewChoreForm family={family} />
         </Route>
+        <Route path="/users/new">
+          <AddFamilyMembers family={family} users={users} />
+        </Route>
       </Switch>
     </div>
   );
-  // if (users.length < 1) {
-  //   return <h1>Project Client</h1>;
-  // } else
-  //   return (
-  //     <div className="container">
-  //       {users.map((user) => {
-  //         return <UserCard user={user} key={user.id}></UserCard>;
-  //       })}
-  //     </div>
-  //   );
 }
 
 export default App;
