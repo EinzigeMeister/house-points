@@ -155,7 +155,13 @@ class PointsByUser(Resource):
         #db.session.query(db.func.sum(Task.points)).filter(Task.completed_by_user_id==1).first()
         user_points_dict = {"points": user_points}
         return make_response(user_points_dict, 200)
+class PointsByFamily(Resource):
+    def get(self, id):
+        user_list= User.query.filter_by(family_id=id).all()
+        user_scores = [{"user_id":user.id, "points": db.session.query(func.sum(Task.points)).filter_by(completed_by_user_id=user.id).first()[0] or 0} for user in user_list]
+        return make_response({"score_list": user_scores}, 200)
     
+api.add_resource(PointsByFamily, '/scoreboard/family/<int:id>', endpoint = 'scoreboard/family/<int:id>')
 api.add_resource(PointsByUser, '/scoreboard/<int:id>', endpoint='scoreboard/<int:id>')
 api.add_resource(Logout, '/logout')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
