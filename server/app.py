@@ -118,13 +118,11 @@ class TasksByFamily(Resource):
         db.session.add(new_task)
         db.session.commit()
         new_task_dict = new_task.to_dict(only=("id","title", "location", "description", "points", "frequency", "family_id"))
-        print(new_task_dict)
         return (new_task_dict, 200)
-    
-class TaskByID(Resource):
     def patch(self, id):
+        request_json = request.get_json()
         task = Task.query.filter_by(id=id).first()
-        for attr in request.get_json():
+        for attr in request_json:
             setattr(task, attr, request.get_json()[attr])
         db.session.add(task)
         db.session.commit()
@@ -140,8 +138,9 @@ class TaskByID(Resource):
         db.session.delete(task)
         db.session.commit()
         return ({"message": "successfully deleted task"}, 200)
-class CheckSession(Resource):
 
+
+class CheckSession(Resource):
     def get(self):
         print(session.get('family_id'))
         family = Family.query.filter_by(id =session.get('family_id')).first()
@@ -152,7 +151,6 @@ class CheckSession(Resource):
         
 api.add_resource(Logout, '/logout')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
-api.add_resource(TaskByID, '/tasks/<int:id>', endpoint='tasks/<int:id>')
 api.add_resource(TasksByFamily, '/tasks/family/<int:id>', endpoint='tasks/family/<int:id>')    
 api.add_resource(UserByFamily, '/users/family/<int:id>', endpoint='user/family/<int:id>')
 api.add_resource(Login, '/login', endpoint='login')
