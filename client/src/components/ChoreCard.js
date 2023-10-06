@@ -16,20 +16,20 @@ function ChoreCard({ chore, family, users }) {
         setDisabled(true);
         setDisabledColor("Green");
         const completedUser = users.find((user) => user.id === chore["completed_by_user_id"]);
-        setChosenUser(completedUser.id);
+        if (completedUser != undefined) setChosenUser(completedUser.id);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, family, chosenUser, refreshPage]);
 
-  const { id, location, title, description, points } = chore;
+  const { id = 1, location, title, description, points } = chore;
   function handleChange(event) {
     setChosenUser(event.target.value);
   }
   function handleCompleteTask(event) {
     const completedByUserID = chosenUser;
     if (completedByUserID === "") return null;
-    fetch(`/tasks/${id}`, {
+    fetch(`/tasks/family/${id}`, {
       credentials: "include",
       method: "PATCH",
       headers: {
@@ -41,7 +41,7 @@ function ChoreCard({ chore, family, users }) {
     setTaskCompleteText("Completed");
   }
   function handleDeleteTask(event) {
-    fetch(`/tasks/${id}`, {
+    fetch(`/tasks/family/${id}`, {
       credentials: "include",
       method: "DELETE",
     });
