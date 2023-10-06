@@ -5,7 +5,7 @@
 # Remote library imports
 from flask import request, make_response, session, jsonify
 from flask_restful import Resource
-
+from sqlalchemy.sql import func
 # Local imports
 from config import app, db, api
 # Add your model imports
@@ -148,7 +148,15 @@ class CheckSession(Resource):
             return family.to_dict(only=("id", "family_name", "family_username"))
         else:
             return make_response({'message': '401: Not Authorized'}, 401)
-        
+
+class PointsByUser(Resource):
+    def get(self, id):
+        user_points = db.session.query(func.sum(Task.points)).filter_by(completed_by_user_id=1).first()[0]
+        #db.session.query(db.func.sum(Task.points)).filter(Task.completed_by_user_id==1).first()
+        user_points_dict = {"points": user_points}
+        return make_response(user_points_dict, 200)
+    
+api.add_resource(PointsByUser, '/scoreboard/<int:id>', endpoint='scoreboard/<int:id>')
 api.add_resource(Logout, '/logout')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(TasksByFamily, '/tasks/family/<int:id>', endpoint='tasks/family/<int:id>')    
