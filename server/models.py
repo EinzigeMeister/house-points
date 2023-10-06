@@ -60,7 +60,7 @@ class Task(db.Model, SerializerMixin):
    frequency = db.Column(db.String, default = "Daily")
    
    completed_by_user_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))  # Completed by
-   user = db.relationship("User")
+   user = db.relationship("User", overlaps="tasks")
    family_id = db.Column(db.Integer, db.ForeignKey('family_table.id'))
    family = db.relationship("Family")
 
