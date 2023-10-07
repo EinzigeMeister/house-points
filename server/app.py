@@ -9,7 +9,7 @@ from sqlalchemy.sql import func
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import Family, User, Task
+from models import *
 
 # Views go here!
 
@@ -104,7 +104,8 @@ class TasksByFamily(Resource):
         description = task_json.get("description"),
         location = task_json.get("location", "home")
         if (len(location)<1): location = "home"
-        points = task_json.get("frequency")
+        frequency = task_json.get("frequency")
+        points = task_json.get("points")
         family_id = id
         if (len(title) <1 or len(description)<1):
             return make_response({"error: ": "title and description required"}, 400)
@@ -160,7 +161,22 @@ class PointsByFamily(Resource):
         user_list= User.query.filter_by(family_id=id).all()
         user_scores = [{"user_id":user.id, "points": db.session.query(func.sum(Task.points)).filter_by(completed_by_user_id=user.id).first()[0] or 0} for user in user_list]
         return make_response({"score_list": user_scores}, 200)
-    
+class LikesByUserID(Resource):
+    def get(self, id):
+        user_likes = User.query.filter_by(id=id).first().liked_by
+        return make_response({"likes":len(user_likes)}, 200)
+    def patch(self, id):
+        user = User.query.filter_by(id=id).first()
+        request_json = request.get_json()
+        liked_by_user = User.query.filter_by(id=request_json.get("liked_by")).first()
+        if liked_by_user in user.liked_by:
+            return make_response({"error":"User already liked this person"}, 400)
+        user.liked_by.append(liked_by_user)
+        db.session.add(user)
+        db.session.commit()
+        return make_response({"message": "Add like success"}, 200)
+
+api.add_resource(LikesByUserID, '/scoreboard/user/<int:id>', endpoint= 'scoreboard/user/<int:id>')    
 api.add_resource(PointsByFamily, '/scoreboard/family/<int:id>', endpoint = 'scoreboard/family/<int:id>')
 api.add_resource(PointsByUser, '/scoreboard/<int:id>', endpoint='scoreboard/<int:id>')
 api.add_resource(Logout, '/logout')
