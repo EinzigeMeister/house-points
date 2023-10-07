@@ -5,7 +5,11 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from config import db, bcrypt
 
 # Models go here!
-## revert to base Family model: flask db revision -m'Add Family model'
+class Like(db.Model):
+   __tablename__ = 'like_table'
+   id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+   liking_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))
+   liked_by_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))
 
 class Family(db.Model, SerializerMixin):
    __tablename__ = 'family_table'
@@ -36,7 +40,7 @@ class Family(db.Model, SerializerMixin):
 class User(db.Model, SerializerMixin):
    __tablename__ = 'user_table'
 
-   id = db.Column(db.Integer, primary_key = True)
+   id = db.Column(db.Integer, primary_key = True, autoincrement=True)
    name = db.Column(db.String, nullable = False)
    head_of_household = db.Column(db.Boolean, default = False, nullable = False)
 
@@ -44,6 +48,7 @@ class User(db.Model, SerializerMixin):
    family = db.relationship("Family")
    tasks = db.relationship('Task')
 
+   liked_by = db.relationship('User', secondary= 'like_table', primaryjoin =(Like.liked_by_id==id), secondaryjoin=(Like.liking_id==id), backref='liking')
 
 
    def __repr__(self):
