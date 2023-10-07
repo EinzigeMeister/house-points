@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Family, User, Task
+from models import db, Family, User, Task, Like
 
 if __name__ == '__main__':
     fake = Faker()
@@ -18,6 +18,7 @@ if __name__ == '__main__':
         Family.query.delete()
         User.query.delete()
         Task.query.delete()
+        Like.query.delete()
         print("Starting seed...")
         print("Seeding families...")
         families = []
@@ -89,6 +90,15 @@ if __name__ == '__main__':
             tasks.append(new_task)
 
         db.session.add_all(tasks)
+        print('seeding likes...')
+        for u in users:
+            for i in range(int(len([user for user in users if u.family_id == user.family.id])/2)):
+                user = rc([user for user in users if u.family_id ==user.family.id])
+                while (user is u):
+                    user = rc([user for user in users if u.family_id ==user.family.id])
+                u.liked_by.append(user)
+                db.session.add(u)
+
         db.session.commit()
         print('Seeding complete')
 
