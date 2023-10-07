@@ -45,7 +45,7 @@ function App() {
           <UserList users={users} />
         </Route>
         <Route exact path="/scoreboard">
-          <ScoreBoard family={family} users={users} />
+          <ScoreBoard family={family} users={users} updateUserList={updateUserList} />
         </Route>
         <Route path="/login">
           <Login users={users} setFamily={setFamily} setUsers={setUsers} family={family} />
