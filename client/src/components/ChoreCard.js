@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useEffect, useState } from "react";
 
 import { FormControl, InputLabel, Select, MenuItem, Card, Button, CardActions, CardContent, Typography } from "@mui/material";
@@ -22,7 +23,7 @@ function ChoreCard({ chore, family, users }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, family, chosenUser, refreshPage]);
 
-  const { id = 1, location, title, description, points } = chore;
+  const { id = 1, location, title, description, points, frequency } = chore;
   function handleChange(event) {
     setChosenUser(event.target.value);
   }
@@ -59,6 +60,7 @@ function ChoreCard({ chore, family, users }) {
         </Typography>
         <Typography variant="body2">{description}</Typography>
         <Typography variant="body2">Worth {points} points!</Typography>
+        <Typography variant="body2">This should happen {frequency}</Typography>
       </CardContent>
       <CardActions>
         <FormControl>
@@ -76,7 +78,6 @@ function ChoreCard({ chore, family, users }) {
                 {user.name}
               </MenuItem>
             ))}
-            {/* <MenuItem value={30}>Thirty</MenuItem> */}
           </Select>
           <Button onClick={handleCompleteTask} disabled={disabled}>
             {taskCompleteText}
