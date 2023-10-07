@@ -1,8 +1,8 @@
-"""Add Family model
+"""Restore models
 
-Revision ID: aefb6c9bd29a
-Revises: 8d9a979fc2f1
-Create Date: 2023-09-27 00:33:58.007543
+Revision ID: 84d3cfc8278d
+Revises: 931571994923
+Create Date: 2023-10-06 20:10:52.067174
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'aefb6c9bd29a'
-down_revision = '8d9a979fc2f1'
+revision = '84d3cfc8278d'
+down_revision = '931571994923'
 branch_labels = None
 depends_on = None
 
