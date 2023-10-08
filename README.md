@@ -31,6 +31,8 @@
 <hr><p>Project requires: Python, Flask, Javascript, React, and npm</p><h5>Steps</h5><ul>
 <li>Clone or fork this repo</li>
 </ul><ul>
+<li>create a .env file in /server with the key $ SECRET_KEY = (Your secret key)</li>
+</ul><ul>
 <li>navigate to /server</li>
 </ul><ul>
 <li>run $ pipenv install; pipenv shell</li>
