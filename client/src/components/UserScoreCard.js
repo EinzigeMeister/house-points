@@ -67,7 +67,7 @@ function UserScoreCard({ userScore, users, updateUserList }) {
                 <Button onClick={handleLike}>Like this user!</Button>
               </div>
               <div>
-                Currently {numLikes} of {users.length} family members like this user!
+                Currently {numLikes} of {users.length - 1} other family members like this user!
               </div>
             </FormControl>
           </CardActions>
