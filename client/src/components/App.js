@@ -43,7 +43,7 @@ function App() {
           <Home family={family} />
         </Route>
         <Route exact path="/chores">
-          <ChoreList family={family} users={users} />
+          <ChoreList family={family} users={users} activeUser={activeUser} />
         </Route>
         <Route exact path="/users">
           <UserList users={users} />
@@ -61,7 +61,7 @@ function App() {
           <Signup setFamily={setFamily} setActiveUser={setActiveUser} updateUserList={updateUserList} users={users} />
         </Route>
         <Route path="/chores/new">
-          <NewChoreForm family={family} />
+          <NewChoreForm family={family} activeUser={activeUser} />
         </Route>
         <Route path="/users/new">
           <AddFamilyMembers family={family} users={users} updateUserList={updateUserList} setActiveUser={setActiveUser} activeUser={activeUser} />
