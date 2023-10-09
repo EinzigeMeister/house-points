@@ -52,13 +52,13 @@ function App() {
           <ScoreBoard family={family} users={users} updateUserList={updateUserList} />
         </Route>
         <Route path="/login">
-          <Login users={users} setFamily={setFamily} setUsers={setUsers} family={family} setActiveUser={setActiveUser} />
+          <Login users={users} setFamily={setFamily} family={family} setActiveUser={setActiveUser} />
         </Route>
         <Route path="/logout">
           <Logout setFamily={setFamily} setUsers={setUsers} setActiveUser={setActiveUser} />
         </Route>
         <Route path="/signup">
-          <Signup setFamily={setFamily} />
+          <Signup setFamily={setFamily} setActiveUser={setActiveUser} updateUserList={updateUserList} users={users} />
         </Route>
         <Route path="/chores/new">
           <NewChoreForm family={family} />
@@ -67,7 +67,7 @@ function App() {
           <AddFamilyMembers family={family} users={users} updateUserList={updateUserList} setActiveUser={setActiveUser} activeUser={activeUser} />
         </Route>
         <Route path="/users/login">
-          <UserLogin family={family} setActiveUser={setActiveUser} activeUser={activeUser}></UserLogin>
+          <UserLogin family={family} setActiveUser={setActiveUser} activeUser={activeUser} users={users}></UserLogin>
         </Route>
       </Switch>
     </div>
