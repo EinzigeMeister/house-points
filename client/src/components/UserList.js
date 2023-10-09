@@ -6,7 +6,11 @@ function UserList({ users }) {
     return (
       <div className="container">
         {users.map((user) => {
-          return <div key={"User id" + user.id + " User name" + user.name}>{user.name}</div>;
+          return (
+            <div key={"User id" + user.id + " User name" + user.name}>
+              {user.name} {user.head_of_household ? "- Head of household" : ""}
+            </div>
+          );
         })}
       </div>
     );
