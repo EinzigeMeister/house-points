@@ -24,6 +24,7 @@ function UserLogin({ setActiveUser, family, activeUser, users }) {
     },
     validationSchema: formSchema,
     onSubmit: (values, { resetForm }) => {
+      values["family_id"] = family.id;
       fetch("/user_login", {
         credentials: "include",
         method: "POST",
