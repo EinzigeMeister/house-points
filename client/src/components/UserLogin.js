@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-function UserLogin({ setActiveUser, family, activeUser }) {
+function UserLogin({ setActiveUser, family, activeUser, users }) {
   const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]); //use in custom validation for unique username
   //Fetch families to validate unique usernames
@@ -51,6 +51,7 @@ function UserLogin({ setActiveUser, family, activeUser }) {
     },
   });
   if (!family) return <div>Login to your family to set an active family member</div>;
+  else if (users.length === 0) return <div>Add family members to login to your family member account</div>;
   else {
     return (
       <div>
