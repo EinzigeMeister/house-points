@@ -45,7 +45,7 @@ if __name__ == '__main__':
         # User data
         print("Seeding users...")
         users = []
-        test_user = User(name = "John")
+        test_user = User(name = "John", head_of_household=True)
         test_user.family = families[0]
         test_user.password_hash = "Admin"
         users.append(test_user)
@@ -60,7 +60,7 @@ if __name__ == '__main__':
             new_user.password_hash = password_hash
             # make first user in family head of household
             new_users_family = User.query.filter_by(family_id=family.id).all()
-            if len(new_users_family) ==0:
+            if len(new_users_family) == 0 and family.id != 1:
                 new_user.head_of_household=True
                 
             users.append(new_user)

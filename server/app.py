@@ -95,11 +95,6 @@ class Login(Resource):
         if family.authenticate(password):
             session['family_id'] = family.id
             response = [{'family_id': family.to_dict(only=("id", "family_name", "family_username", "users.name", "tasks.id"))}]
-            head_of_household_in_family = User.query.filter_by(family_id=family.id, head_of_household=True).first()
-            print(head_of_household_in_family.to_dict(only=('id', 'name', 'head_of_household', 'family_id', 'tasks.id')))
-            if head_of_household_in_family:
-                session['user_id'] = head_of_household_in_family.id
-                response.append({'user': head_of_household_in_family.to_dict(only=('id', 'name', 'head_of_household', 'family_id', 'tasks.id'))})
             return make_response(response, 200)
 
         return {'error': 'Invalid username or password'}, 401
@@ -114,6 +109,8 @@ class UserLogin(Resource):
         if user.authenticate(password):
             session['user_id'] = user.id
             return user.to_dict(only=('id', 'name', 'head_of_household', 'family_id', 'tasks.id'))
+        return {'error': 'Invalid username or password'}, 401
+
         
 class Logout(Resource):
     def delete(self):

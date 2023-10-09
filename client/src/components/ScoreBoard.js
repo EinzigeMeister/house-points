@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useState, useEffect } from "react";
 import UserScoreCard from "./UserScoreCard";
 function ScoreBoard({ family, users, updateUserList }) {
@@ -41,38 +42,3 @@ function ScoreBoard({ family, users, updateUserList }) {
 }
 
 export default ScoreBoard;
-/*
-<Card sx={{ minWidth: 275 }} className={id.toString()}>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {location}
-        </Typography>
-        <Typography variant="body2">{description}</Typography>
-        <Typography variant="body2">Worth {points} points!</Typography>
-      </CardContent>
-      <CardActions>
-        <FormControl>
-          <InputLabel id="demo-simple-select-label">Completed By</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={chosenUser}
-            label="Completed By"
-            onChange={handleChange}
-          >
-            {users.map((user) => (
-              <MenuItem key={user.id} value={user.id}>
-                {user.name}
-              </MenuItem>
-            ))}
-            </Select>
-            <Button onClick={handleCompleteTask}>
-              {taskCompleteText}
-            </Button>
-          </FormControl>
-        </CardActions>
-      </Card>
-*/

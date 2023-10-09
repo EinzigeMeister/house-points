@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-function Logout({ setFamily, setUsers }) {
+function Logout({ setFamily, setUsers, setActiveUser }) {
   let history = useHistory();
   function handleLogout() {
     fetch("/logout", {
@@ -10,6 +10,7 @@ function Logout({ setFamily, setUsers }) {
     }).then(() => {
       setFamily(null);
       setUsers([]);
+      setActiveUser(null)
       history.push("/login");
     });
   }

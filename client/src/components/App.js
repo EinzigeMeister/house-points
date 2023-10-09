@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import UserList from "./UserList";
@@ -54,7 +55,7 @@ function App() {
           <Login users={users} setFamily={setFamily} setUsers={setUsers} family={family} setActiveUser={setActiveUser} />
         </Route>
         <Route path="/logout">
-          <Logout setFamily={setFamily} setUsers={setUsers} />
+          <Logout setFamily={setFamily} setUsers={setUsers} setActiveUser={setActiveUser} />
         </Route>
         <Route path="/signup">
           <Signup setFamily={setFamily} />
