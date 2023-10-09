@@ -12,28 +12,37 @@ async function getChores(family, setChoreList) {
   setChoreList(choreJSON);
 }
 
-function ChoreList({ family, users }) {
+function ChoreList({ family, users, activeUser }) {
   const [choreList, setChoreList] = useState([]);
+  const [refreshPage, setRefreshPage] = useState(false);
 
   useEffect(() => {
     if (family) {
       getChores(family, setChoreList);
     }
-  }, [family]);
+  }, [family, refreshPage]);
 
   //if (!family) return <div>Login to view Chore List</div>;
   if (family == null) return <div>Please login to view chores</div>;
   if (choreList.length > 0) {
     return (
       <>
-        <div style={{ color: "red" }} display={users.length !== 0 ? "block" : ""}>
+        <div style={{ color: "red" }}>
           {users.length === 0 ? "Add some family members to be able to complete tasks" : ""}
+          {!activeUser && users.length > 0 ? "Login from the Change Active Member page to complete tasks" : ""}
         </div>
         <div className="container">
           {choreList.map((chore) => {
             return (
               <div className="col-md-2" key={chore.id}>
-                <ChoreCard users={users} chore={chore} family={family}></ChoreCard>
+                <ChoreCard
+                  users={users}
+                  chore={chore}
+                  family={family}
+                  activeUser={activeUser}
+                  setRefreshPage={setRefreshPage}
+                  refreshPage={refreshPage}
+                ></ChoreCard>
               </div>
             );
           })}
