@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-function Signup({ setFamily }) {
+function Signup({ setFamily, setActiveUser }) {
   const [families, setFamilies] = useState([{}]);
   const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]); //use in custom validation for unique username
@@ -45,17 +45,17 @@ function Signup({ setFamily }) {
             resetForm({ values: "" });
             setRefreshPage(!refreshPage);
             setErrorMsgs([]);
-            return r.json();
           }
           if (r.status === 400) {
             setErrorMsgs(["Username already exists, please try one not listed below"]);
           }
-
+          return r.json();
           //Add else for error messages (i.e. unique username)
         })
         .then((data) => {
           if (data.hasOwnProperty("id")) {
             setFamily(data);
+            setActiveUser(null);
           }
         });
     },
