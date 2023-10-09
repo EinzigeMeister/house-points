@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-function Login({ setFamily }) {
+function Login({ setFamily, setActiveUser }) {
   const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]); //use in custom validation for unique username
   //Fetch families to validate unique usernames
@@ -46,7 +46,10 @@ function Login({ setFamily }) {
         })
         .then((data) => {
           if (!data.hasOwnProperty("error")) {
-            setFamily(data);
+            setFamily(data["family_id"]);
+            if (data.hasOwnProperty("user_id")) {
+              setActiveUser(data["user_id"]);
+            }
             setRefreshPage(!refreshPage);
             history.push("/");
           }

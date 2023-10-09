@@ -43,14 +43,27 @@ class User(db.Model, SerializerMixin):
    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
    name = db.Column(db.String, nullable = False)
    head_of_household = db.Column(db.Boolean, default = False, nullable = False)
-
+   _password_hash = db.Column(db.String)
+   
    family_id = db.Column(db.Integer, db.ForeignKey('family_table.id'))
    family = db.relationship("Family")
    tasks = db.relationship('Task')
+   
 
    liked_by = db.relationship('User', secondary= 'like_table', primaryjoin =(Like.liked_by_id==id), secondaryjoin=(Like.liking_id==id), backref='liking')
 
-
+   @hybrid_property
+   def password_hash(self):
+      raise AttributeError("Password hashes may not be viewed.")
+   
+   @password_hash.setter
+   def password_hash(self, password):
+      bcrypt_hash = bcrypt.generate_password_hash(password.encode('utf-8')).decode('utf-8')
+      self._password_hash = bcrypt_hash
+   
+   def authenticate(self, password):
+      return bcrypt.check_password_hash(self._password_hash, password)
+   
    def __repr__(self):
       return f'User: {self.name}, ID: {self.id}, Head of Household: {self.head_of_household}'
    

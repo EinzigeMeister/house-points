@@ -48,21 +48,35 @@ class UserList(Resource):
     def post(self):
         user_json = request.get_json()
         name = user_json.get('name')
-        if (not name): return make_response({"error" : "Must include a name"}, 400)
+        password = user_json.get('password')
         head_of_household = user_json.get('head_of_household') or False
+
+        if (not name or not password): return make_response({"error" : "Must include a name and password"}, 400)
+        
+        print(user_json)
         family_id = user_json.get('family_id')
+        duplicate_user = User.query.filter_by(family_id=family_id, name=name).first()
+        if duplicate_user:
+            return make_response({"error" : "Must include a unique name, use a nickname if required or preferred"}, 400)
+        
         new_user = User(
             name=user_json.get("name"),
             family_id=family_id,
             head_of_household=head_of_household
         )
+        new_user.password_hash = password
+
         db.session.add(new_user)
         db.session.commit()
+
+        if new_user.head_of_household:
+            session['user_id'] = new_user.id
         resp = make_response(
             new_user.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id")),
             201
         )
         return resp
+    
 class TaskList(Resource):
     def get(self):
         task_dict = [t.to_dict(only=("id","title", "location", "description", "points", "frequency", "completed_by_user_id", "family_id")) for t in Task.query.all()]
@@ -80,13 +94,31 @@ class Login(Resource):
 
         if family.authenticate(password):
             session['family_id'] = family.id
-            return family.to_dict(only=("id","family_name", "family_username", "users.name", "tasks.id")), 200
+            response = [{'family_id': family.to_dict(only=("id", "family_name", "family_username", "users.name", "tasks.id"))}]
+            head_of_household_in_family = User.query.filter_by(family_id=family.id, head_of_household=True).first()
+            print(head_of_household_in_family.to_dict(only=('id', 'name', 'head_of_household', 'family_id', 'tasks.id')))
+            if head_of_household_in_family:
+                session['user_id'] = head_of_household_in_family.id
+                response.append({'user': head_of_household_in_family.to_dict(only=('id', 'name', 'head_of_household', 'family_id', 'tasks.id'))})
+            return make_response(response, 200)
 
         return {'error': 'Invalid username or password'}, 401
     
+class UserLogin(Resource):
+    def post(self):
+        name = request.get_json()['name']
+        user = User.query.filter_by(name=name).first()
+        if not user:
+            return {'error': 'Invalid username or password'}, 401
+        password = request.get_json()['password']
+        if user.authenticate(password):
+            session['user_id'] = user.id
+            return user.to_dict(only=('id', 'name', 'head_of_household', 'family_id', 'tasks.id'))
+        
 class Logout(Resource):
     def delete(self):
         session['family_id'] = None
+        session['user_id'] = None
         return make_response({'message': '204: No Content'}, 204)
 
 class UserByFamily(Resource):
@@ -113,6 +145,7 @@ class TasksByFamily(Resource):
             title=title[0],
             description = description[0],
             location = location,
+            frequency=frequency,
             points = points,
             family_id = family_id
         )
@@ -143,19 +176,22 @@ class TasksByFamily(Resource):
 
 class CheckSession(Resource):
     def get(self):
-        print(session.get('family_id'))
         family = Family.query.filter_by(id =session.get('family_id')).first()
+        user = User.query.filter_by(id=session.get('user_id')).first()
+        response= []
         if family:
-            return family.to_dict(only=("id", "family_name", "family_username"))
+            response.append({'family': family.to_dict(only=("id", "family_name", "family_username", "users.name", "tasks.id"))})
+            if user:
+                response.append({'user': user.to_dict(only=("id","name", "head_of_household", "family_id", "tasks.id"))})
         else:
-            return make_response({'message': '401: Not Authorized'}, 401)
-
+            return make_response({'error': '401: Not Authorized'}, 401)
+        return make_response(response, 200)
 class PointsByUser(Resource):
     def get(self, id):
-        user_points = db.session.query(func.sum(Task.points)).filter_by(completed_by_user_id=1).first()[0]
-        #db.session.query(db.func.sum(Task.points)).filter(Task.completed_by_user_id==1).first()
+        user_points = db.session.query(func.sum(Task.points)).filter_by(completed_by_user_id=id).first()[0]
         user_points_dict = {"points": user_points}
         return make_response(user_points_dict, 200)
+    
 class PointsByFamily(Resource):
     def get(self, id):
         user_list= User.query.filter_by(family_id=id).all()
@@ -184,6 +220,7 @@ api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(TasksByFamily, '/tasks/family/<int:id>', endpoint='tasks/family/<int:id>')    
 api.add_resource(UserByFamily, '/users/family/<int:id>', endpoint='user/family/<int:id>')
 api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(UserLogin, '/user_login', endpoint='user_login')
 api.add_resource(TaskList, '/tasks', endpoint='tasks')
 api.add_resource(UserList, '/users', endpoint='users')
 api.add_resource(FamilyList, '/families', endpoint='families')

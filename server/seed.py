@@ -45,13 +45,19 @@ if __name__ == '__main__':
         # User data
         print("Seeding users...")
         users = []
-        for i in range(100):
+        test_user = User(name = "John")
+        test_user.family = families[0]
+        test_user.password_hash = "Admin"
+        users.append(test_user)
+        for i in range(49):
             name = fake.first_name()
             family = rc(families)
+            password_hash = fake.password(length=10)
             new_user = User(
                 name=name
             )
             new_user.family= family
+            new_user.password_hash = password_hash
             # make first user in family head of household
             new_users_family = User.query.filter_by(family_id=family.id).all()
             if len(new_users_family) ==0:

@@ -10,9 +10,11 @@ import Login from "./Login";
 import Logout from "./Logout";
 import NewChoreForm from "./NewChoreForm";
 import AddFamilyMembers from "./AddFamilyMembers";
+import UserLogin from "./UserLogin";
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [activeUser, setActiveUser] = useState(null);
   const [family, setFamily] = useState(null);
   function updateUserList() {
     fetch(`http://127.0.0.1:5555/users/family/${family.id}`)
@@ -22,15 +24,16 @@ function App() {
   useEffect(() => {
     fetch("/check_session", { credentials: "include" }).then((response) => {
       if (response.ok) {
-        response.json().then((fam) => {
-          if (!family || family.id !== fam.id) setFamily(fam);
+        response.json().then((data) => {
+          if (!family || data[0].hasOwnProperty("family_id" && family.id !== data[0]["family"].id)) setFamily(data[0]["family"]);
+          if (data.length > 1 && (!activeUser || activeUser.id !== data[1]["user"].id)) setActiveUser(data[1]["user"]);
         });
       }
     });
     if (family != null) {
       updateUserList();
     }
-  }, [family]);
+  }, [family, activeUser]);
   return (
     <div>
       <NavBar family={family} />
@@ -48,7 +51,7 @@ function App() {
           <ScoreBoard family={family} users={users} updateUserList={updateUserList} />
         </Route>
         <Route path="/login">
-          <Login users={users} setFamily={setFamily} setUsers={setUsers} family={family} />
+          <Login users={users} setFamily={setFamily} setUsers={setUsers} family={family} setActiveUser={setActiveUser} />
         </Route>
         <Route path="/logout">
           <Logout setFamily={setFamily} setUsers={setUsers} />
@@ -60,7 +63,10 @@ function App() {
           <NewChoreForm family={family} />
         </Route>
         <Route path="/users/new">
-          <AddFamilyMembers family={family} users={users} updateUserList={updateUserList} />
+          <AddFamilyMembers family={family} users={users} updateUserList={updateUserList} setActiveUser={setActiveUser} activeUser={activeUser} />
+        </Route>
+        <Route path="/users/login">
+          <UserLogin family={family} setActiveUser={setActiveUser} activeUser={activeUser}></UserLogin>
         </Route>
       </Switch>
     </div>
