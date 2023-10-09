@@ -102,7 +102,7 @@ class Login(Resource):
 class UserLogin(Resource):
     def post(self):
         name = request.get_json()['name']
-        user = User.query.filter_by(name=name).first()
+        user = User.query.filter_by(name=name, family_id=request.get_json()['family_id']).first()
         if not user:
             return {'error': 'Invalid username or password'}, 401
         password = request.get_json()['password']
