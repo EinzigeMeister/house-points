@@ -4,10 +4,8 @@ import * as yup from "yup";
 
 function UserLogin({ setActiveUser, family, activeUser, users }) {
   const [refreshPage, setRefreshPage] = useState(false);
-  const [errorMsgs, setErrorMsgs] = useState([]); //use in custom validation for unique username
-  //Fetch families to validate unique usernames
+  const [errorMsgs, setErrorMsgs] = useState([]);
 
-  //Update family list after each successful registration
   useEffect(() => {
     setRefreshPage(true);
   }, [refreshPage]);
