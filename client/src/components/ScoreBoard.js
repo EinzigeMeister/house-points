@@ -51,7 +51,7 @@ function ScoreBoard({ family, users, updateUserList, activeUser }) {
               You must log in from the Change Active Member page to interact with the scoreboard
             </div>
             <Button onClick={handleReset} disabled={!activeUser || !(activeUser && activeUser.head_of_household)}>
-              Reset scores!
+              Reset scores! {"(This will also remove all tasks and likes)"}
             </Button>
             <div style={{ color: "blue" }}>{activeUser && !activeUser.head_of_household ? "You must be head of household to reset the scores" : ""}</div>
             {userScores.map((x) => {
