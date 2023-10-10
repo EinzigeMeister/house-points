@@ -51,7 +51,11 @@ if __name__ == '__main__':
         users.append(test_user)
         for i in range(49):
             name = fake.first_name()
-            family = rc(families)
+            family = None
+            if i<len(families):
+                family = families[i]
+            else:
+                family = rc(families)
             password_hash = fake.password(length=10)
             new_user = User(
                 name=name
