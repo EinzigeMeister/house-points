@@ -209,6 +209,17 @@ class LikesByUserID(Resource):
         db.session.commit()
         return make_response({"message": "Add like success"}, 200)
 
+class LikesByFamily(Resource):
+    def delete(self, id):
+        user_list = User.query.filter_by(family_id=id)
+        for user in user_list:
+            like_list = Like.query.filter_by(liking_id=user.id).all()
+            for like in like_list: db.session.delete(like)
+            
+        db.session.commit()
+        return {},200
+
+api.add_resource(LikesByFamily, '/likes/family/<int:id>', endpoint='likes/family/<int:id>')
 api.add_resource(LikesByUserID, '/scoreboard/user/<int:id>', endpoint= 'scoreboard/user/<int:id>')    
 api.add_resource(PointsByFamily, '/scoreboard/family/<int:id>', endpoint = 'scoreboard/family/<int:id>')
 api.add_resource(PointsByUser, '/scoreboard/<int:id>', endpoint='scoreboard/<int:id>')
