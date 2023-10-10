@@ -5,25 +5,16 @@ import React, { useEffect, useState } from "react";
 import { FormControl, Card, Button, CardActions, CardContent, Typography } from "@mui/material";
 
 function ChoreCard({ chore, activeUser, refreshPage, setRefreshPage }) {
-  const [disableCompletetask, setDisableCompleteTask] = useState(true);
-  const [disableRemoveTask, setDisableRemoveTask] = useState(true);
   const [disabledColor, setDisabledColor] = useState("Yellow");
   const [taskCompleteText, setTaskCompleteText] = useState("Complete Task");
   useEffect(() => {
     if (activeUser) {
       if (chore.completed_by_user_id) {
         setDisabledColor("Green");
-        if (!disableCompletetask) setDisableCompleteTask(true);
-        if (!disableRemoveTask) setDisableRemoveTask(true);
-      } else {
-        if (disableCompletetask) setDisableCompleteTask(false);
-        if (activeUser.head_of_household === true) if (disableRemoveTask) setDisableRemoveTask(false);
+        setRefreshPage(!refreshPage);
       }
-    } else {
-      if (!disableCompletetask) setDisableCompleteTask(true);
-      if (!disableRemoveTask) setDisableRemoveTask(true);
     }
-  }, [activeUser, refreshPage, setDisableCompleteTask, setTaskCompleteText]);
+  }, [activeUser, taskCompleteText]);
 
   const { id = 1, location, title, description, points, frequency } = chore;
   function handleCompleteTask() {
@@ -42,7 +33,7 @@ function ChoreCard({ chore, activeUser, refreshPage, setRefreshPage }) {
     setRefreshPage(!refreshPage);
   }
   function handleDeleteTask() {
-    fetch(`/tasks/family/${id}`, {
+    fetch(`/tasks/${id}`, {
       credentials: "include",
       method: "DELETE",
     });
@@ -64,12 +55,8 @@ function ChoreCard({ chore, activeUser, refreshPage, setRefreshPage }) {
       </CardContent>
       <CardActions>
         <FormControl>
-          <Button onClick={handleCompleteTask} disabled={disableCompletetask}>
-            {taskCompleteText}
-          </Button>
-          <Button onClick={handleDeleteTask} disabled={disableRemoveTask}>
-            Remove Task
-          </Button>
+          <Button onClick={handleCompleteTask}>{disabledColor == "Green" ? "" : taskCompleteText}</Button>
+          <Button onClick={handleDeleteTask}>{disabledColor == "Green" ? "" : "Remove Task"}</Button>
         </FormControl>
       </CardActions>
     </Card>
