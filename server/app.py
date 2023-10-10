@@ -165,6 +165,14 @@ class TasksByFamily(Resource):
             200
         )
     def delete(self, id):
+        family_tasks = Task.query.filter_by(family_id=id).all()
+        for task in family_tasks:
+            db.session.delete(task)
+        db.session.commit()
+        return ({'message': 'tasks deleted'}, 200)
+    
+class TaskByID(Resource):
+    def delete(self, id):
         task = Task.query.filter_by(id=id).first()
         db.session.delete(task)
         db.session.commit()
@@ -218,7 +226,7 @@ class LikesByFamily(Resource):
             
         db.session.commit()
         return {},200
-
+api.add_resource(TaskByID, '/tasks/<int:id>', endpoint='tasks/<int:id>')
 api.add_resource(LikesByFamily, '/likes/family/<int:id>', endpoint='likes/family/<int:id>')
 api.add_resource(LikesByUserID, '/scoreboard/user/<int:id>', endpoint= 'scoreboard/user/<int:id>')    
 api.add_resource(PointsByFamily, '/scoreboard/family/<int:id>', endpoint = 'scoreboard/family/<int:id>')
