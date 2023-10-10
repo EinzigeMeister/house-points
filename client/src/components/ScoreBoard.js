@@ -40,7 +40,7 @@ function ScoreBoard({ family, users, updateUserList, activeUser }) {
       )
       .then(setRefreshPage(!refreshPage));
   }
-  if (!family) return <h1>Login to view your family's score board.</h1>;
+  if (!family) return <div>Login to view your family's score board.</div>;
   else {
     if (users.length < 1) return <div>Add users to get their scores!</div>;
     else {
