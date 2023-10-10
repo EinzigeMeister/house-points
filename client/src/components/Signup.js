@@ -9,9 +9,13 @@ function Signup({ setFamily, setActiveUser }) {
   const [errorMsgs, setErrorMsgs] = useState([]); //use in custom validation for unique username
   //Fetch families to validate unique usernames
   async function fetchFamilies() {
-    const familyFetch = await fetch("http://127.0.0.1:5555/families");
-    const familyJSON = await familyFetch.json();
-    setFamilies(familyJSON);
+    try {
+      const familyFetch = await fetch("http://127.0.0.1:5555/families");
+      const familyJSON = await familyFetch.json();
+      setFamilies(familyJSON);
+    } catch (errors) {
+      console.log(errors);
+    }
   }
   //Update family list after each successful registration
   useEffect(() => {
