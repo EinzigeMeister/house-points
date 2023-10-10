@@ -10,7 +10,8 @@ class Like(db.Model):
    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
    liking_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))
    liked_by_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))
-
+   def __repr__(self):
+      return f'Liked by: {self.liked_by_id} Liking: {self.liking_id}' 
 class Family(db.Model, SerializerMixin):
    __tablename__ = 'family_table'
 
