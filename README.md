@@ -26,7 +26,11 @@
 </ul><ul>
 <li>Add Task: This page creates a new chore</li>
 </ul><ul>
-<li>Home: Gives a message to the family or shows login page if not logged in (FAQ/use cases here in future)</li>
+<li>Add Family: Allows the head of household to add family members accounts</li>
+</ul><ul>
+<li>Change Active Member: You can log into your individual user account or change user accounts on this page</li>
+</ul><ul>
+<li>Home: Gives a message to the family and has basic instructions for using this application</li>
 </ul><h2>Setup</h2>
 <hr><p>Project requires: Python, Flask, Javascript, React, and npm</p><h5>Steps</h5><ul>
 <li>Clone or fork this repo</li>
@@ -52,15 +56,9 @@
 <hr><p>You can create contests for your family with rewards for completing chores.</p><h2>Project Status</h2>
 <hr><p>In Progress</p><h2>Improvements</h2>
 <hr><ul>
-<li>Add user logins with privileges</li>
-</ul><h2>Features that can be added</h2>
-<hr><ul>
-<li>Change Completed by in Task View and Scoreboard to the active user</li>
-</ul><ul>
-<li>Only allow head_of_household to create/remove tasks or add family members</li>
-</ul><ul>
-<li>Add reset to scoreboard to declare a winner and reset tasks / likes</li>
-</ul><h2>Acknowledgement</h2>
+<li>Add aesthetics, recurring tasks, start/end dates</li>
+</ul>
+<hr><h2>Acknowledgement</h2>
 <hr><ul>
 <li>This project was inspired by the chore system I used at home with my chosen family. We had the winner each month who could choose what we did on our family night that month.</li>
 </ul>
