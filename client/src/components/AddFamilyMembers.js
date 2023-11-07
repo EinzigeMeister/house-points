@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import UserList from "./UserList";
-function AddFamilyMembers({ family, users, updateUserList, setActiveUser, activeUser }) {
+function AddFamilyMembers({ family, users, updateUserList, setActiveUser }) {
   const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
   useEffect(() => {
@@ -50,8 +50,6 @@ function AddFamilyMembers({ family, users, updateUserList, setActiveUser, active
     onSubmit: handleSubmit,
   });
   if (!family) return <div>Login to add family members</div>;
-  if (users.length > 0) {
-  }
   return (
     <div>
       <p style={{ color: "red" }}>{errorMsgs.length > 0 ? errorMsgs[0] : ""}</p>
