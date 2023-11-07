@@ -13,7 +13,11 @@ function AddFamilyMembers({ family, users, updateUserList, setActiveUser, active
     name: yup.string().required("Must enter a name").max(50),
     password: yup.string().required("Must enter a password").max(50),
   });
-
+  function updatePageOnSuccess() {
+    updateUserList();
+    setErrorMsgs([]);
+    setRefreshPage(!refreshPage);
+  }
   function handleSubmit(values, { resetForm }) {
     values["family_id"] = family.id;
     if (users.length < 1) values["head_of_household"] = true;
@@ -26,20 +30,14 @@ function AddFamilyMembers({ family, users, updateUserList, setActiveUser, active
       },
       body: JSON.stringify(values, null, 2),
     })
-      .then((r) => {
-        return r.json();
-      })
+      .then((r) => r.json())
       .then((data) => {
-        if (!data) return null;
         if (data.hasOwnProperty("error")) {
           setErrorMsgs(...errorMsgs, [data["error"]]);
-          return null;
         } else {
-          setErrorMsgs([]);
           resetForm();
           if (users.length < 1) setActiveUser(data);
-          updateUserList();
-          setRefreshPage(!refreshPage);
+          updatePageOnSuccess();
         }
       });
   }
