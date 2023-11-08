@@ -50,29 +50,27 @@ function UserLogin({ setActiveUser, family, activeUser, users }) {
     },
   });
   if (!family) return <div>Login to your family to set an active family member</div>;
-  else if (users.length === 0) return <div>Add family members to login to your family member account</div>;
-  else {
-    return (
-      <div>
-        {activeUser ? <div>{activeUser.name} is currently logged in.</div> : null}
-        {errorMsgs.map((e) => {
-          return <div style={{ color: "red" }}>{e}</div>;
-        })}
-        <div>Enter your family member's login credentials to login to your personal account</div>
-        <form onSubmit={formik.handleSubmit} style={{ margin: "30px" }}>
-          <label htmlFor="name">Name</label>
-          <br />
-          <input id="name" name="name" autoComplete="given-name" onChange={formik.handleChange} value={formik.values.name} />
-          <p style={{ color: "red" }}> {formik.errors.name}</p>
-          <label htmlFor="password">Password</label>
-          <br />
-          <input type="password" id="password" name="password" autoComplete="current-password" onChange={formik.handleChange} value={formik.values.password} />
-          <p style={{ color: "red" }}> {formik.errors.password}</p>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    );
-  }
+  if (users.length === 0) return <div>Add family members to login to your family member account</div>;
+  return (
+    <div>
+      {activeUser ? <div>{activeUser.name} is currently logged in.</div> : null}
+      {errorMsgs.map((e) => {
+        return <div style={{ color: "red" }}>{e}</div>;
+      })}
+      <div>Enter your family member's login credentials to login to your personal account</div>
+      <form onSubmit={formik.handleSubmit} style={{ margin: "30px" }}>
+        <label htmlFor="name">Name</label>
+        <br />
+        <input id="name" name="name" autoComplete="given-name" onChange={formik.handleChange} value={formik.values.name} />
+        <p style={{ color: "red" }}> {formik.errors.name}</p>
+        <label htmlFor="password">Password</label>
+        <br />
+        <input type="password" id="password" name="password" autoComplete="current-password" onChange={formik.handleChange} value={formik.values.password} />
+        <p style={{ color: "red" }}> {formik.errors.password}</p>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
 }
 
 export default UserLogin;
