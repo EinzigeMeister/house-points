@@ -7,8 +7,8 @@ function NewChoreForm({ family, activeUser }) {
   const [disableForm, setDisableForm] = useState(true);
   useEffect(() => {
     if (activeUser && activeUser.head_of_household) {
-      if (disableForm) setDisableForm(false);
-    } else if (!disableForm) setDisableForm(true);
+      setDisableForm(false);
+    } else setDisableForm(true);
   }, [activeUser, disableForm]);
   const formSchema = yup.object().shape({
     name: yup.string().required("Must enter a name for the chore").max(50),
@@ -26,14 +26,10 @@ function NewChoreForm({ family, activeUser }) {
       },
       body: JSON.stringify(values, null, 2),
     })
-      .then((r) => {
-        return r.json();
-      })
+      .then((r) => r.json())
       .then((data) => {
-        if (data.hasOwnProperty("error")) {
-          setErrorMsgs(...errorMsgs, [data["error"]]);
-          return null;
-        } else {
+        if (data.hasOwnProperty("error")) setErrorMsgs(...errorMsgs, [data["error"]]);
+        else {
           setErrorMsgs([]);
           resetForm();
         }
