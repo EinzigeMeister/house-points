@@ -1,52 +1,46 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable eqeqeq */
 import React, { useEffect, useState } from "react";
-
 import { FormControl, Card, Button, CardActions, CardContent, Typography } from "@mui/material";
 
 function ChoreCard({ chore, activeUser, refreshPage, setRefreshPage }) {
   const [disabledColor, setDisabledColor] = useState("Yellow");
   const [taskCompleteText, setTaskCompleteText] = useState("Complete Task");
-  useEffect(() => {
-    if (activeUser) {
-      if (chore.completed_by_user_id) {
-        setDisabledColor("Green");
-        setRefreshPage(!refreshPage);
-      }
-    }
-  }, [activeUser, taskCompleteText]);
-
   const { id = 1, location, title, description, points, frequency } = chore;
+  useEffect(() => {
+    if (chore.completed_by_user_id) updateTaskState(taskCompleteText, "Green");
+    else if (!activeUser) updateTaskState(taskCompleteText, "Grey");
+  }, [activeUser, taskCompleteText, disabledColor]);
+
+  function updateTaskState(text = taskCompleteText, color = disabledColor) {
+    setDisabledColor(color);
+    setTaskCompleteText(text);
+    setRefreshPage(!refreshPage);
+  }
   function handleCompleteTask() {
-    const completedByUserID = activeUser.id;
-    if (completedByUserID === "") return null;
     fetch(`/tasks/family/${id}`, {
       credentials: "include",
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ completed_by_user_id: completedByUserID }),
+      body: JSON.stringify({ completed_by_user_id: activeUser.id }),
     });
-    setTaskCompleteText("Completed");
-    setDisabledColor("Green");
-    setRefreshPage(!refreshPage);
+    updateTaskState("Completed", "Green");
   }
   function handleDeleteTask() {
     fetch(`/tasks/${id}`, {
       credentials: "include",
       method: "DELETE",
     });
-    setDisabledColor("Green");
-    setRefreshPage(!refreshPage);
+    updateTaskState("Deleted", "Grey");
   }
   return (
-    <Card sx={{ minWidth: 275 }} className={id.toString()}>
+    <Card className={id.toString()}>
       <CardContent>
         <Typography bgcolor={disabledColor} variant="h5" component="div">
           {title}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography sx={{ mb: 0.5 }} color="text.secondary">
           {location}
         </Typography>
         <Typography variant="body2">{description}</Typography>
@@ -55,8 +49,8 @@ function ChoreCard({ chore, activeUser, refreshPage, setRefreshPage }) {
       </CardContent>
       <CardActions>
         <FormControl>
-          <Button onClick={handleCompleteTask}>{disabledColor == "Green" ? "" : taskCompleteText}</Button>
-          <Button onClick={handleDeleteTask}>{disabledColor == "Green" ? "" : "Remove Task"}</Button>
+          <Button onClick={handleCompleteTask}>{disabledColor === "Green" || disabledColor === "Grey" ? "" : taskCompleteText}</Button>
+          <Button onClick={handleDeleteTask}>{disabledColor === "Green" || disabledColor === "Grey" ? "" : "Remove Task"}</Button>
         </FormControl>
       </CardActions>
     </Card>
