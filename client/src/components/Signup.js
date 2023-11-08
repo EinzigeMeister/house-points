@@ -73,18 +73,18 @@ function Signup({ setFamily, setActiveUser }) {
       <form onSubmit={formik.handleSubmit} style={{ margin: "30px" }}>
         <label htmlFor="username">Username</label>
         <br />
-        <input id="username" name="username" onChange={formik.handleChange} value={formik.values.username} />
+        <input id="username" name="username" autoComplete="username" onChange={formik.handleChange} value={formik.values.username} />
         <p style={{ color: "red" }}> {formik.errors.username}</p>
         <label htmlFor="family_name">Last Name</label>
         <br />
 
-        <input id="family_name" name="family_name" onChange={formik.handleChange} value={formik.values.family_name} />
+        <input id="family_name" name="family_name" autoComplete="family-name" onChange={formik.handleChange} value={formik.values.family_name} />
         <p style={{ color: "red" }}> {formik.errors.family_name}</p>
 
         <label htmlFor="password">password</label>
         <br />
 
-        <input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password} />
+        <input type="password" id="password" name="password" autoComplete="new-password" onChange={formik.handleChange} value={formik.values.password} />
         <p style={{ color: "red" }}> {formik.errors.password}</p>
         <button type="submit">Submit</button>
       </form>

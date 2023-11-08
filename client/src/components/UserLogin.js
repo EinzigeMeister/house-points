@@ -62,11 +62,11 @@ function UserLogin({ setActiveUser, family, activeUser, users }) {
         <form onSubmit={formik.handleSubmit} style={{ margin: "30px" }}>
           <label htmlFor="name">Name</label>
           <br />
-          <input id="name" name="name" onChange={formik.handleChange} value={formik.values.name} />
+          <input id="name" name="name" autoComplete="given-name" onChange={formik.handleChange} value={formik.values.name} />
           <p style={{ color: "red" }}> {formik.errors.name}</p>
           <label htmlFor="password">Password</label>
           <br />
-          <input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password} />
+          <input type="password" id="password" name="password" autoComplete="current-password" onChange={formik.handleChange} value={formik.values.password} />
           <p style={{ color: "red" }}> {formik.errors.password}</p>
           <button type="submit">Submit</button>
         </form>
