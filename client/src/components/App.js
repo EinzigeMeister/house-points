@@ -64,7 +64,7 @@ function App() {
           <NewChoreForm family={family} activeUser={activeUser} />
         </Route>
         <Route path="/users/new">
-          <AddFamilyMembers family={family} users={users} updateUserList={updateUserList} setActiveUser={setActiveUser} activeUser={activeUser} />
+          <AddFamilyMembers family={family} users={users} updateUserList={updateUserList} setActiveUser={setActiveUser} />
         </Route>
         <Route path="/users/login">
           <UserLogin family={family} setActiveUser={setActiveUser} activeUser={activeUser} users={users}></UserLogin>
