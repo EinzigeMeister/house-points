@@ -23,17 +23,17 @@ function App() {
       .then((data) => setUsers(data));
   }
   useEffect(() => {
-    fetch("/check_session", { credentials: "include" }).then((response) => {
-      if (response.ok) {
-        response.json().then((data) => {
-          if (!family || (data[0].hasOwnProperty("family_id") && family.id !== data[0]["family"].id)) setFamily(data[0]["family"]);
+    fetch("/check_session", { credentials: "include" })
+      .then((response) => {
+        if (response.ok) return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          if (!family || data[0].hasOwnProperty("family_id" && family.id !== data[0]["family"].id)) setFamily(data[0]["family"]);
           if (data.length > 1 && (!activeUser || activeUser.id !== data[1]["user"].id)) setActiveUser(data[1]["user"]);
-        });
-      }
-    });
-    if (family != null) {
-      updateUserList();
-    }
+        }
+      });
+    if (family != null) updateUserList();
   }, [family, activeUser]);
   return (
     <div>
