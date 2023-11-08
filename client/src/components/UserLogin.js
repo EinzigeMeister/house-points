@@ -32,9 +32,8 @@ function UserLogin({ setActiveUser, family, activeUser, users }) {
         body: JSON.stringify(values, null, 2),
       })
         .then((r) => {
-          if (r.status === 200) {
-            resetForm({ values: "" });
-            setRefreshPage(!refreshPage);
+          if (r.ok) {
+            resetForm();
             setErrorMsgs([]);
           } else if (r.status === 401) {
             setErrorMsgs(["Invalid username or password"]);
