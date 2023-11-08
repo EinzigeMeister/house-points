@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
 function UserLogin({ setActiveUser, family, activeUser, users }) {
   const [refreshPage, setRefreshPage] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
-
-  useEffect(() => {
-    setRefreshPage(true);
-  }, [refreshPage]);
 
   const formSchema = yup.object().shape({
     name: yup.string().required("Must enter a name or nickname").max(16),
