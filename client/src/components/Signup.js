@@ -6,18 +6,14 @@ import * as yup from "yup";
 function Signup({ setFamily, setActiveUser }) {
   const [families, setFamilies] = useState([{}]);
   const [refreshPage, setRefreshPage] = useState(false);
-  const [errorMsgs, setErrorMsgs] = useState([]); //use in custom validation for unique username
-  //Fetch families to validate unique usernames
+  const [errorMsgs, setErrorMsgs] = useState([]);
+
   async function fetchFamilies() {
-    try {
-      const familyFetch = await fetch("http://127.0.0.1:5555/families");
-      const familyJSON = await familyFetch.json();
-      setFamilies(familyJSON);
-    } catch (errors) {
-      console.log(errors);
-    }
+    const familyFetch = await fetch("http://127.0.0.1:5555/families");
+    const familyJSON = await familyFetch.json();
+    if (familyJSON.length > 0) setFamilies(familyJSON);
   }
-  //Update family list after each successful registration
+
   useEffect(() => {
     fetchFamilies();
   }, [refreshPage]);
@@ -45,8 +41,8 @@ function Signup({ setFamily, setActiveUser }) {
         body: JSON.stringify(values, null, 2),
       })
         .then((r) => {
-          if (r.status === 201) {
-            resetForm({ values: "" });
+          if (r.ok) {
+            resetForm();
             setRefreshPage(!refreshPage);
             setErrorMsgs([]);
           }
@@ -54,7 +50,6 @@ function Signup({ setFamily, setActiveUser }) {
             setErrorMsgs(["Username already exists, please try one not listed below"]);
           }
           return r.json();
-          //Add else for error messages (i.e. unique username)
         })
         .then((data) => {
           if (data.hasOwnProperty("id")) {
