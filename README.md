@@ -54,7 +54,7 @@
 <li>App will now be running in your default browser and accessible from "http://localhost:3000/"</li>
 </ul><h2>Usage</h2>
 <hr><p>You can create contests for your family with rewards for completing chores.</p><h2>Project Status</h2>
-<hr><p>In Progress</p><h2>Improvements</h2>
+<hr><p>Always improving!</p><h2>Improvements</h2>
 <hr><ul>
 <li>Add aesthetics, recurring tasks, start/end dates</li>
 </ul>
