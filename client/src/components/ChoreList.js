@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChoreCard from "./ChoreCard";
-/*
-TODO:
-[ ] Generate Family chore list
-[ ] Filter by not-completed
-[ ] 
- */
+
 async function getChores(family, setChoreList) {
   let choreResponse = await fetch(`/tasks/family/${family.id}`);
   let choreJSON = await choreResponse.json();
@@ -22,7 +17,6 @@ function ChoreList({ family, users, activeUser }) {
     }
   }, [family, refreshPage]);
 
-  //if (!family) return <div>Login to view Chore List</div>;
   if (family == null) return <div>Please login to view chores</div>;
   if (choreList.length > 0) {
     return (
