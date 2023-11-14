@@ -37,7 +37,7 @@ function App() {
   }, [family, activeUser]);
   return (
     <div>
-      <NavBar family={family} />
+      <NavBar family={family} activeUser={activeUser} />
       <Switch>
         <Route exact path="/">
           <Home family={family} />
