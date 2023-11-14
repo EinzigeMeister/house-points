@@ -4,3 +4,7 @@
   --link: #61dafb;
   --text: hsla(0, 0%, 100%, 0.88);
 }
+
+body {
+  background-color: beige;
+}

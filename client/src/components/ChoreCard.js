@@ -35,7 +35,7 @@ function ChoreCard({ chore, activeUser, refreshPage, setRefreshPage }) {
     updateTaskState("Deleted", "Grey");
   }
   return (
-    <Card className={id.toString()}>
+    <Card sx={{ backgroundColor: "beige", border: 0.5 }}>
       <CardContent>
         <Typography bgcolor={disabledColor} variant="h5" component="div">
           {title}

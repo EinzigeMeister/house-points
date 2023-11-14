@@ -36,7 +36,7 @@ function UserScoreCard({ userScore, users, updateUserList, activeUser }) {
   if (userScore != undefined)
     return (
       <>
-        <Card sx={{ minWidth: 50 }}>
+        <Card sx={{ backgroundColor: "beige", border: 0.5 }}>
           <CardContent>
             <Typography varient="h4" component="div">
               <div style={{ color: "red" }}>{errorMsg.length > 0 ? errorMsg[errorMsg.length - 1] : ""}</div>
