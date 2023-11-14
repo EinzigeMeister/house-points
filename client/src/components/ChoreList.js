@@ -28,7 +28,7 @@ function ChoreList({ family, users, activeUser }) {
         <div className="container">
           {choreList.map((chore) => {
             return (
-              <div className="col-md-2" key={chore.id}>
+              <div key={chore.id}>
                 <ChoreCard
                   users={users}
                   chore={chore}
